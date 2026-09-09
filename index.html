@@ -30,9 +30,9 @@ button,input,select{font:inherit} button{cursor:pointer}
 .page-title{margin:6px 4px 18px}.page-title h2{margin:0;font-size:27px}
 .page-title p{margin:5px 0 0;color:var(--muted);font-size:14px}
 
-.hero-logo{text-align:center;padding:2px 0 16px}
-.hero-logo img{width:105px;height:105px;object-fit:contain}
-.hero-title{margin:-2px 0 4px;font-size:30px;letter-spacing:5px;font-weight:800}
+.hero-logo{text-align:center;padding:8px 0 18px}
+.hero-logo img{width:145px;height:145px;object-fit:contain}
+.hero-title{margin:-4px 0 5px;font-size:35px;letter-spacing:5px;font-weight:800}
 .hero-subtitle{color:var(--muted);letter-spacing:3px;font-size:11px}
 
 .next-match{background:linear-gradient(145deg,#fff7f7,#fff);border:1px solid #f0dada;border-radius:20px;padding:18px;box-shadow:0 4px 18px rgba(25,25,25,.06);margin-bottom:16px}
@@ -97,7 +97,7 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 .section-switch button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px;font-weight:700;color:var(--muted)}
 .section-switch button.active{background:#fff;color:var(--red);box-shadow:0 2px 6px rgba(0,0,0,.06)}
 
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 5px max(8px,env(safe-area-inset-bottom));z-index:20}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 5px max(8px,env(safe-area-inset-bottom));z-index:20}
 .nav-button{border:0;background:transparent;color:#7c8288;padding:5px 2px;font-size:10px;font-weight:600}
 .nav-icon{display:block;font-size:19px;margin-bottom:3px}.nav-button.active{color:var(--red)}
 
@@ -119,13 +119,7 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 <body>
 <div class="app">
 
-<header class="top-header">
-  <div class="brand">
-    <img src="cetus-logo.png" alt="Cetus logo">
-    <div class="brand-text"><h1>CETUS</h1><p>ZAALVOETBAL</p></div>
-  </div>
-  <div class="season">Seizoen 2026 / 2027</div>
-</header>
+
 
 <main class="content">
 
@@ -139,9 +133,9 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
   <div id="nextMatchContainer"></div>
 
   <div class="stat-grid">
-    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-number" id="homePosition">-</div><div class="stat-label">positie</div></div>
-    <div class="stat-card"><div class="stat-icon">⚽</div><div class="stat-number" id="homeGames">0</div><div class="stat-label">competitie</div></div>
-    <div class="stat-card"><div class="stat-icon">●</div><div class="stat-number" id="homePoints">0</div><div class="stat-label">punten</div></div>
+    <div class="stat-card"><div class="stat-icon">⚽</div><div class="stat-number" id="homeGames">0</div><div class="stat-label">wedstrijden</div></div>
+    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-number" id="homeWins">0</div><div class="stat-label">gewonnen</div></div>
+    <div class="stat-card"><div class="stat-icon">●</div><div class="stat-number" id="homeGoals">0</div><div class="stat-label">doelpunten</div></div>
   </div>
 
   <div class="card">
@@ -169,13 +163,7 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
   <div id="matchesContainer"></div>
 </section>
 
-<section id="standings" class="page">
-  <div class="page-title"><h2>Stand</h2><p>Alleen competitiewedstrijden tellen mee</p></div>
-  <div class="card"><div class="table-wrap">
-    <table><thead><tr><th>#</th><th>Team</th><th>G</th><th>W</th><th>G</th><th>V</th><th>DV</th><th>DT</th><th>P</th></tr></thead>
-    <tbody id="standingsBody"></tbody></table>
-  </div></div>
-</section>
+
 
 <section id="stats" class="page">
   <div class="page-title"><h2>Statistieken</h2><p>Prestaties van Cetus</p></div>
@@ -213,7 +201,6 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 <nav class="bottom-nav">
   <button class="nav-button active" onclick="showPage('home',this)"><span class="nav-icon">⌂</span>Home</button>
   <button class="nav-button" onclick="showPage('matches',this)"><span class="nav-icon">▣</span>Wedstrijden</button>
-  <button class="nav-button" onclick="showPage('standings',this)"><span class="nav-icon">♜</span>Stand</button>
   <button class="nav-button" onclick="showPage('stats',this)"><span class="nav-icon">▥</span>Statistieken</button>
   <button class="nav-button" onclick="showPage('team',this)"><span class="nav-icon">♟</span>Team</button>
 </nav>
@@ -376,26 +363,30 @@ function renderLastMatch(){
   let m=played[0],r=results[m.id],out=r.cetus>r.opponent?"win":r.cetus<r.opponent?"loss":"draw",label=out==="win"?"Gewonnen":out==="loss"?"Verloren":"Gelijkspel";
   c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-weight:800;font-size:18px">Cetus - ${escapeHtml(m.opponent)}</div><div style="color:var(--muted);font-size:13px;margin-top:5px">${formatLongDate(m.date)} · ${m.type}</div></div><div class="result ${out}" style="font-size:23px">${r.cetus} - ${r.opponent}</div></div><div style="margin-top:12px;color:var(--muted);font-size:13px">${label}</div><button class="secondary-button" style="width:100%;margin-top:14px" onclick="openResultModal(${m.id})">Uitslag aanpassen</button>`;
 }
-function calculateStandings(){
-  const teams={};const create=n=>{if(!teams[n])teams[n]={name:n,played:0,wins:0,draws:0,losses:0,goalsFor:0,goalsAgainst:0,points:0}};
-  matches.filter(m=>m.type==="Competitie").forEach(m=>{create("Cetus");create(m.opponent);let r=results[m.id];if(!r)return;let a=teams.Cetus,b=teams[m.opponent];a.played++;b.played++;a.goalsFor+=r.cetus;a.goalsAgainst+=r.opponent;b.goalsFor+=r.opponent;b.goalsAgainst+=r.cetus;
-    if(r.cetus>r.opponent){a.wins++;a.points+=3;b.losses++}else if(r.cetus<r.opponent){b.wins++;b.points+=3;a.losses++}else{a.draws++;b.draws++;a.points++;b.points++}
-  });
-  return Object.values(teams).sort((a,b)=>b.points-a.points||((b.goalsFor-b.goalsAgainst)-(a.goalsFor-a.goalsAgainst))||b.goalsFor-a.goalsFor);
-}
-function renderStandings(){
-  const body=document.getElementById("standingsBody"),s=calculateStandings();body.innerHTML="";
-  s.forEach((t,i)=>{let row=document.createElement("tr");row.innerHTML=`<td class="position">${i+1}</td><td class="${t.name==="Cetus"?"our-team":""}">${escapeHtml(t.name)}</td><td>${t.played}</td><td>${t.wins}</td><td>${t.draws}</td><td>${t.losses}</td><td>${t.goalsFor}</td><td>${t.goalsAgainst}</td><td><strong>${t.points}</strong></td>`;body.appendChild(row)});
-  let cetus=s.find(t=>t.name==="Cetus");
-  document.getElementById("homePosition").textContent=cetus&&cetus.played>0?(s.findIndex(t=>t.name==="Cetus")+1):"-";
-  document.getElementById("homeGames").textContent=cetus?cetus.played:0;
-  document.getElementById("homePoints").textContent=cetus?cetus.points:0;
-}
 function renderStats(){
   let played=matches.filter(m=>results[m.id]&&(statsScope==="all"||(statsScope==="competition"&&m.type==="Competitie")||(statsScope==="friendly"&&m.type==="Vriendschappelijk")));
   let goals=0,wins=0,draws=0,losses=0;
-  played.forEach(m=>{let r=results[m.id];goals+=r.cetus;if(r.cetus>r.opponent)wins++;else if(r.cetus<r.opponent)losses++;else draws++});
-  document.getElementById("statGames").textContent=played.length;document.getElementById("statGoals").textContent=goals;document.getElementById("statWins").textContent=wins;document.getElementById("statDraws").textContent=draws;document.getElementById("statLosses").textContent=losses;document.getElementById("statWinPercentage").textContent=(played.length?Math.round(wins/played.length*100):0)+"%";
+  played.forEach(m=>{
+    let r=results[m.id];
+    goals+=r.cetus;
+    if(r.cetus>r.opponent)wins++;
+    else if(r.cetus<r.opponent)losses++;
+    else draws++;
+  });
+  document.getElementById("statGames").textContent=played.length;
+  document.getElementById("statGoals").textContent=goals;
+  document.getElementById("statWins").textContent=wins;
+  document.getElementById("statDraws").textContent=draws;
+  document.getElementById("statLosses").textContent=losses;
+  document.getElementById("statWinPercentage").textContent=(played.length?Math.round(wins/played.length*100):0)+"%";
+
+  const allPlayed=matches.filter(m=>results[m.id]);
+  const allWins=allPlayed.filter(m=>results[m.id].cetus>results[m.id].opponent).length;
+  const allGoals=allPlayed.reduce((sum,m)=>sum+results[m.id].cetus,0);
+  document.getElementById("homeGames").textContent=allPlayed.length;
+  document.getElementById("homeWins").textContent=allWins;
+  document.getElementById("homeGoals").textContent=allGoals;
+
   renderScorers(played);
 }
 function renderScorers(scopeMatches){
@@ -412,7 +403,7 @@ function renderPlayers(){
 function addPlayer(){let i=document.getElementById("newPlayerInput"),n=i.value.trim();if(!n)return;players.push(n);localStorage.setItem("cetus_players",JSON.stringify(players));i.value="";renderPlayers()}
 function deletePlayer(i){if(!confirm("Deze speler verwijderen?"))return;players.splice(i,1);localStorage.setItem("cetus_players",JSON.stringify(players));renderPlayers()}
 function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function renderAll(){updateCategoryButtons();renderNextMatch();renderMatches();renderStandings();renderStats();renderPlayers();renderLastMatch()}
+function renderAll(){updateCategoryButtons();renderNextMatch();renderMatches();renderStats();renderPlayers();renderLastMatch()}
 renderAll();
 document.getElementById("resultModal").addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal()});
 </script>
