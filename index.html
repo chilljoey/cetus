@@ -117,7 +117,7 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 .score-team{text-align:center;color:var(--muted);font-size:13px}.score-input{width:100%;margin-top:7px;padding:13px;border:1px solid var(--border);border-radius:11px;text-align:center;font-size:24px;font-weight:800}
 .score-vs{padding-bottom:13px;color:var(--muted);font-weight:700}.scorers-title{font-weight:700;margin-bottom:10px}
 .scorer-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:7px;background:#fff}
-.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}.modal-actions.with-delete{grid-template-columns:1fr 1fr 1fr}
 .secondary-button,.save-button{border:0;border-radius:11px;padding:13px;font-weight:700}.secondary-button{background:#eeeeed;color:#555a60}.save-button{background:var(--red);color:#fff}
 
 @media (min-width:700px){.bottom-nav{border-radius:18px 18px 0 0}.modal{align-items:center}.modal-box{border-radius:22px}}
@@ -143,7 +143,7 @@ main{padding-bottom:110px}\n</style>
   <div class="stat-grid">
     <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 9h16"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01"/></svg></div><div class="stat-number" id="homeGames">0</div><div class="stat-label">wedstrijden</div></div>
     <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M7 5h10v3c0 3-2 5-5 5s-5-2-5-5z"/><path d="M7 7H4v1c0 2.5 1.5 4 4 4M17 7h3v1c0 2.5-1.5 4-4 4"/><path d="M12 13v4M8 21h8M9 17h6"/></svg></div><div class="stat-number" id="homeWins">0</div><div class="stat-label">gewonnen</div></div>
-    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7 2 1.5-.7 2.4h-2.6L10 8.5z"/><path d="m10.7 8.5-1.9-2M13.3 8.5l1.9-2M10.7 11l-2.3 1.5M13.3 11l2.3 1.5M10.8 14.2 9.6 17M13.2 14.2l1.2 2.8"/></svg></div><div class="stat-number" id="homeGoalDiff">0 - 0</div><div class="stat-label">doelsaldo</div></div>
+    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7 2 1.5-.7 2.4h-2.6L10 8.5z"/><path d="m10.7 8.5-1.9-2M13.3 8.5l1.9-2M10.7 11l-2.3 1.5M13.3 11l2.3 1.5M10.8 14.2 9.6 17M13.2 14.2l1.2 2.8"/></svg></div><div class="stat-number" id="homeGoalDiff">0</div><div class="stat-label">doelsaldo</div></div>
   </div>
 
   <div class="card">
@@ -234,6 +234,7 @@ main{padding-bottom:110px}\n</style>
     <div class="scorers-help">Koppel ieder Cetus-doelpunt aan een speler. Je kunt dit ook later toevoegen.</div>
     <div id="scorersInputs"></div>
     <div class="modal-actions">
+      <button id="deleteResultButton" class="secondary-button" style="display:none;background:#f5e8e8;color:var(--red-dark)" onclick="deleteResult()">Uitslag verwijderen</button>
       <button class="secondary-button" onclick="closeModal()">Annuleren</button>
       <button class="save-button" onclick="saveResult()">Opslaan</button>
     </div>
@@ -322,7 +323,11 @@ function renderMatches(){
 function openResultModal(id){
   currentMatchId=id;let m=matches.find(x=>x.id===id),r=results[id];if(!m)return;
   document.getElementById("modalTitle").textContent=r?"Uitslag aanpassen":"Uitslag invoeren";
-  document.getElementById("modalOpponent").textContent=m.opponent;
+  document.getElementById("modalOpponent").textContent=`${m.opponent} · ${formatLongDate(m.date)} · ${m.time}`;
+  const deleteButton=document.getElementById("deleteResultButton");
+  const actions=document.querySelector(".modal-actions");
+  deleteButton.style.display=r?"block":"none";
+  actions.classList.toggle("with-delete",!!r);
   document.getElementById("cetusScore").value=r?r.cetus:0;
   document.getElementById("opponentScore").value=r?r.opponent:0;
   renderScorerInputs(r?r.scorers||[]:[],r?r.cetus:0);
@@ -343,6 +348,20 @@ function renderScorerInputs(existing,count){
 document.getElementById("cetusScore").addEventListener("input",function(){
   let goals=Math.max(0,parseInt(this.value)||0),old=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value);this.value=goals;renderScorerInputs(old,goals);
 });
+async function deleteResult(){
+  if(!currentMatchId || !results[currentMatchId])return;
+  if(!confirm("Deze uitslag en de doelpuntenmakers verwijderen?"))return;
+  const deleteButton=document.getElementById("deleteResultButton");
+  deleteButton.disabled=true;deleteButton.textContent="Verwijderen…";
+  try{
+    const {error:goalError}=await supabaseClient.from("goals").delete().eq("match_id",currentMatchId);
+    if(goalError)throw goalError;
+    const {error:resultError}=await supabaseClient.from("results").delete().eq("match_id",currentMatchId);
+    if(resultError)throw resultError;
+    await loadData();closeModal();renderAll();
+  }catch(error){console.error(error);alert("Verwijderen is niet gelukt. Probeer opnieuw.");}
+  finally{deleteButton.disabled=false;deleteButton.textContent="Uitslag verwijderen";}
+}
 async function saveResult(){
   if(!currentMatchId)return;
   let cetus=Math.max(0,parseInt(document.getElementById("cetusScore").value)||0),opp=Math.max(0,parseInt(document.getElementById("opponentScore").value)||0);
@@ -381,7 +400,7 @@ function renderStats(){
   const winPercentage=played.length?Math.round(wins/played.length*100):0,lossPercentage=played.length?Math.round(losses/played.length*100):0;
   document.getElementById("statGames").textContent=played.length;document.getElementById("statGoals").textContent=goals;document.getElementById("statGoalsAgainst").textContent=goalsAgainst;document.getElementById("statWins").textContent=wins;document.getElementById("statDraws").textContent=draws;document.getElementById("statLosses").textContent=losses;document.getElementById("statWinPercentage").textContent=winPercentage+"%";document.getElementById("statLossPercentage").textContent=lossPercentage+"%";
   const allPlayed=matches.filter(m=>results[m.id]),allWins=allPlayed.filter(m=>results[m.id].cetus>results[m.id].opponent).length,allFor=allPlayed.reduce((sum,m)=>sum+results[m.id].cetus,0),allAgainst=allPlayed.reduce((sum,m)=>sum+results[m.id].opponent,0);
-  document.getElementById("homeGames").textContent=allPlayed.length;document.getElementById("homeWins").textContent=allWins;document.getElementById("homeGoalDiff").textContent=`${allFor} - ${allAgainst}`;
+  document.getElementById("homeGames").textContent=allPlayed.length;document.getElementById("homeWins").textContent=allWins;const diff=allFor-allAgainst;document.getElementById("homeGoalDiff").textContent=diff>0?`+${diff}`:String(diff);
   renderScorers(played);
 }
 function renderScorers(scopeMatches){
@@ -407,6 +426,8 @@ async function deletePlayer(id){
   try{const {error}=await supabaseClient.from("players").delete().eq("id",id);if(error)throw error;players=players.filter(x=>x.id!==id);Object.values(results).forEach(r=>{r.scorers=(r.scorers||[]).filter(n=>n!==p.name)});renderPlayers();renderStats();}
   catch(error){console.error(error);alert("Speler verwijderen is niet gelukt.");}
 }
+document.getElementById("newPlayerInput").addEventListener("keydown",e=>{if(e.key==="Enter")addPlayer();});
+
 function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 
 async function loadData(){
