@@ -244,7 +244,7 @@ main{padding-bottom:110px}\n</style>
 <script>
 const SUPABASE_URL = "https://lkcobfvfpldcjoqponvl.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eIpWuUuChifLO-A-Gn_w8w_QoQCBfqH";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 let matches = [];
 let players = [];
@@ -351,14 +351,14 @@ async function saveResult(){
   if(scorers.length>0 && scorers.length!==cetus){alert("Selecteer voor elk Cetus-doelpunt een doelpuntenmaker, of laat ze allemaal leeg om ze later toe te voegen.");return}
   const saveButton=document.querySelector(".save-button");saveButton.disabled=true;saveButton.textContent="Opslaan…";
   try{
-    const {data:resultRow,error:resultError}=await supabase.from("results").upsert({match_id:currentMatchId,cetus_goals:cetus,opponent_goals:opp},{onConflict:"match_id"}).select().single();
+    const {data:resultRow,error:resultError}=await supabaseClient.from("results").upsert({match_id:currentMatchId,cetus_goals:cetus,opponent_goals:opp},{onConflict:"match_id"}).select().single();
     if(resultError)throw resultError;
-    const {error:deleteError}=await supabase.from("goals").delete().eq("match_id",currentMatchId);
+    const {error:deleteError}=await supabaseClient.from("goals").delete().eq("match_id",currentMatchId);
     if(deleteError)throw deleteError;
     if(scorers.length){
       const goalRows=scorers.map(name=>({match_id:currentMatchId,player_id:players.find(p=>p.name===name)?.id})).filter(x=>x.player_id);
       if(goalRows.length!==scorers.length)throw new Error("Een doelpuntenmaker kon niet aan een speler worden gekoppeld.");
-      const {error:goalError}=await supabase.from("goals").insert(goalRows);
+      const {error:goalError}=await supabaseClient.from("goals").insert(goalRows);
       if(goalError)throw goalError;
     }
     await loadData();closeModal();renderAll();
@@ -398,23 +398,23 @@ function renderPlayers(){
 async function addPlayer(){
   let i=document.getElementById("newPlayerInput"),n=i.value.trim();if(!n)return;
   if(players.some(p=>p.name.toLowerCase()===n.toLowerCase())){alert("Deze speler staat al in het team.");return}
-  try{const {data,error}=await supabase.from("players").insert({name:n}).select().single();if(error)throw error;players.push(data);i.value="";renderPlayers();}
+  try{const {data,error}=await supabaseClient.from("players").insert({name:n}).select().single();if(error)throw error;players.push(data);i.value="";renderPlayers();}
   catch(error){console.error(error);alert("Speler toevoegen is niet gelukt.");}
 }
 async function deletePlayer(id){
   const p=players.find(x=>x.id===id);if(!p)return;
   if(!confirm("Deze speler verwijderen?"))return;
-  try{const {error}=await supabase.from("players").delete().eq("id",id);if(error)throw error;players=players.filter(x=>x.id!==id);Object.values(results).forEach(r=>{r.scorers=(r.scorers||[]).filter(n=>n!==p.name)});renderPlayers();renderStats();}
+  try{const {error}=await supabaseClient.from("players").delete().eq("id",id);if(error)throw error;players=players.filter(x=>x.id!==id);Object.values(results).forEach(r=>{r.scorers=(r.scorers||[]).filter(n=>n!==p.name)});renderPlayers();renderStats();}
   catch(error){console.error(error);alert("Speler verwijderen is niet gelukt.");}
 }
 function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 
 async function loadData(){
   const [{data:matchRows,error:matchError},{data:playerRows,error:playerError},{data:resultRows,error:resultError},{data:goalRows,error:goalError}] = await Promise.all([
-    supabase.from("matches").select("*").order("match_date",{ascending:true}).order("start_time",{ascending:true}),
-    supabase.from("players").select("*").order("name",{ascending:true}),
-    supabase.from("results").select("*"),
-    supabase.from("goals").select("match_id,player_id")
+    supabaseClient.from("matches").select("*").order("match_date",{ascending:true}).order("start_time",{ascending:true}),
+    supabaseClient.from("players").select("*").order("name",{ascending:true}),
+    supabaseClient.from("results").select("*"),
+    supabaseClient.from("goals").select("match_id,player_id")
   ]);
   if(matchError)throw matchError;if(playerError)throw playerError;if(resultError)throw resultError;if(goalError)throw goalError;
   matches=(matchRows||[]).map(m=>({id:m.id,date:m.match_date,time:String(m.start_time).slice(0,5),opponent:m.opponent,type:m.category==="competitie"?"Competitie":"Vriendschappelijk",venue:m.venue}));
@@ -432,12 +432,12 @@ async function migrateLocalDataIfNeeded(){
     const localPlayers=JSON.parse(localStorage.getItem("cetus_players")||"[]");
     const usefulPlayers=localPlayers.filter(n=>n&&n!=="Speler 1"&&n!=="Speler 2"&&n!=="Speler 3"&&n!=="Speler 4"&&n!=="Speler 5");
     if(usefulPlayers.length && players.length===0){
-      const {error}=await supabase.from("players").insert([...new Set(usefulPlayers)].map(name=>({name})));if(error)throw error;
+      const {error}=await supabaseClient.from("players").insert([...new Set(usefulPlayers)].map(name=>({name})));if(error)throw error;
     }
     const localResults=JSON.parse(localStorage.getItem("cetus_results")||"{}");
     if(localResults[1] && !results[1]){
       const r=localResults[1];
-      const {error}=await supabase.from("results").upsert({match_id:1,cetus_goals:r.cetus||0,opponent_goals:r.opponent||0},{onConflict:"match_id"});if(error)throw error;
+      const {error}=await supabaseClient.from("results").upsert({match_id:1,cetus_goals:r.cetus||0,opponent_goals:r.opponent||0},{onConflict:"match_id"});if(error)throw error;
     }
     localStorage.setItem(marker,"1");
     await loadData();
