@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cetus Voetbal</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.app {
+    max-width: 700px;
+    margin: auto;
+    min-height: 100vh;
+    background: white;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 24px 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+header p {
+    margin: 6px 0 0;
+    color: #d1d5db;
+}
+
+nav {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 5;
+}
+
+nav button {
+    flex: 1;
+    border: 0;
+    background: white;
+    padding: 15px 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+nav button.active {
+    color: #111827;
+    border-bottom: 3px solid #111827;
+}
+
+main {
+    padding: 18px;
+}
+
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin-top: -8px;
+    margin-bottom: 18px;
+}
+
+.match {
+    width: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.match:hover {
+    background: #f9fafb;
+}
+
+.match-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.opponent {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.match-info {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.result {
+    font-size: 20px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.result.win {
+    color: #15803d;
+}
+
+.result.draw {
+    color: #b45309;
+}
+
+.result.loss {
+    color: #dc2626;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background: #e5e7eb;
+    color: #374151;
+    font-size: 11px;
+    margin-top: 7px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th,
+td {
+    padding: 10px 6px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    text-align: left;
+}
+
+th {
+    color: #6b7280;
+    font-weight: bold;
+}
+
+.cetus-row {
+    font-weight: bold;
+    background: #f3f4f6;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.stat-number {
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.scorer {
+    display: flex;
+    justify-content: space-between;
+    padding: 13px 4px;
+    border-bottom: 1px solid #eee;
+}
+
+.player-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+}
+
+button.primary {
+    background: #111827;
+    color: white;
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.player {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.delete {
+    border: 0;
+    background: none;
+    color: #dc2626;
+    cursor: pointer;
+}
+
+.filter {
+    margin-bottom: 15px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    padding: 15px;
+    overflow-y: auto;
+    z-index: 20;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-box {
+    max-width: 500px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.close {
+    border: 0;
+    background: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.score-inputs {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.score-inputs input {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.scorer-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.secondary {
+    width: 100%;
+    padding: 11px;
+    border: 1px dashed #aaa;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.empty {
+    padding: 25px;
+    text-align: center;
+    color: #6b7280;
+    border: 1px dashed #ccc;
+    border-radius: 10px;
+}
+
+@media (max-width: 450px) {
+    main {
+        padding: 14px;
+    }
+
+    header {
+        padding: 20px 15px;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    nav button {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 8px 4px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+    <h1>⚽ Cetus</h1>
+    <p>Zaalvoetbal seizoen 2026/2027</p>
+</header>
+
+<nav>
+    <button class="tab active" data-view="matches">Wedstrijden</button>
+    <button class="tab" data-view="stand">Stand</button>
+    <button class="tab" data-view="stats">Statistieken</button>
+    <button class="tab" data-view="team">Team</button>
+</nav>
+
+<main>
+
+<!-- WEDSTRIJDEN -->
+
+<section id="matches" class="view active">
+
+<h2>Wedstrijden</h2>
+<p class="subtitle">
+    Tik op een wedstrijd om de uitslag en doelpuntenmakers in te voeren.
+</p>
+
+<select id="filter" class="filter">
+    <option value="all">Alle wedstrijden</option>
+    <option value="open">Nog te spelen</option>
+    <option value="played">Gespeeld</option>
+</select>
+
+<div id="matchesList"></div>
+
+</section>
+
+
+<!-- STAND -->
+
+<section id="stand" class="view">
+
+<h2>Stand</h2>
+<p class="subtitle">
+    De competitie-stand wordt automatisch berekend.
+</p>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>#</th>
+<th>Team</th>
+<th>G</th>
+<th>W</th>
+<th>G</th>
+<th>V</th>
+<th>DV</th>
+<th>DT</th>
+<th>+/-</th>
+<th>P</th>
+</tr>
+</thead>
+
+<tbody id="standBody"></tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<!-- STATISTIEKEN -->
+
+<section id="stats" class="view">
+
+<h2>Statistieken</h2>
+<p class="subtitle">
+    De prestaties van Cetus en de doelpuntenmakers.
+</p>
+
+<div class="stats-grid">
+
+<div class="stat">
+<div class="stat-label">Wedstrijden</div>
+<div class="stat-number" id="statGames">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">Doelpunten</div>
+<div class="stat-number" id="statGoals">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">Gewonnen</div>
+<div class="stat-number" id="statWins">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">Gelijk</div>
+<div class="stat-number" id="statDraws">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">Verloren</div>
+<div class="stat-number" id="statLosses">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">Winstpercentage</div>
+<div class="stat-number" id="statWinPercentage">0%</div>
+</div>
+
+</div>
+
+<h3>Topscorers</h3>
+
+<div id="scorerList"></div>
+
+</section>
+
+
+<!-- TEAM -->
+
+<section id="team" class="view">
+
+<h2>Team</h2>
+
+<p class="subtitle">
+    Voeg hier de spelers van Cetus toe.
+</p>
+
+<form id="playerForm" class="player-form">
+
+<input
+    id="playerName"
+    placeholder="Naam speler"
+    maxlength="40"
+    required
+>
+
+<button class="primary">
+    Toevoegen
+</button>
+
+</form>
+
+<div id="playerList"></div>
+
+</section>
+
+</main>
+
+
+<!-- WEDSTRIJD BEWERKEN -->
+
+<div id="modal" class="modal">
+
+<div class="modal-box">
+
+<div class="modal-header">
+
+<div>
+<h2 id="modalTitle"></h2>
+<p id="modalInfo" class="subtitle"></p>
+</div>
+
+<button class="close" id="closeModal">×</button>
+
+</div>
+
+
+<form id="resultForm">
+
+<div class="score-inputs">
+
+<div>
+<strong>Cetus</strong>
+<input id="cetusScore" type="number" min="0" max="99" required>
+</div>
+
+<div>–</div>
+
+<div>
+<strong id="opponentName"></strong>
+<input id="opponentScore" type="number" min="0" max="99" required>
+</div>
+
+</div>
+
+
+<h3>Doelpuntenmakers</h3>
+
+<p class="subtitle">
+    Voeg voor ieder doelpunt een speler toe.
+</p>
+
+<div id="scorersEditor"></div>
+
+<button type="button" class="secondary" id="addScorer">
+    + Doelpunt toevoegen
+</button>
+
+
+<button class="primary" style="width:100%;">
+    Wedstrijd opslaan
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const schedule = [
+
+["04 sep","20:00-21:00","Jona","competitie","Walvis"],
+["18 sep","21:00-22:00","Tweede Jeugd","competitie","Bakwetering"],
+["25 sep","21:00-22:00","Bierussia Dortmund","competitie","Bakwetering"],
+["09 okt","20:00-21:00","Atletic Bierbao","competitie","Bakwetering"],
+["16 okt","20:00-21:00","Boca Seniors","competitie","Bakwetering"],
+["30 okt","21:00-22:00","Timo","vriendschappelijk","Walvis"],
+["06 nov","20:00-21:00","TechMudde Fc","competitie","De Drie Maenen"],
+["20 nov","19:00-20:00","Los Amigos","competitie","Bakwetering"],
+["27 nov","21:00-22:00","Dion Blonk","vriendschappelijk","Walvis"],
+["04 dec","20:00-21:00","VHL veteranen","competitie","De Drie Maenen"],
+["11 dec","19:00-20:00","Barbier voetBal","competitie","Bakwetering"],
+["08 jan","19:00-20:00","V.W.A.B.","competitie","De Drie Maenen"],
+["15 jan","20:00-21:00","Tweede Jeugd","competitie","De Drie Maenen"],
+["22 jan","21:00-22:00","Wilco","vriendschappelijk","Walvis"],
+["29 jan","20:00-21:00","Bierussia Dortmund","competitie","Bakwetering"],
+["05 feb","20:00-21:00","Jona","competitie","Walvis"],
+["12 feb","19:00-20:00","ACM","vriendschappelijk","Walvis"],
+["19 feb","20:00-21:00","Atletic Bierbao","competitie","De Drie Maenen"],
+["05 mrt","21:00-22:00","Viriditas","vriendschappelijk","Walvis"],
+["12 mrt","19:00-20:00","Boca Seniors","competitie","De Drie Maenen"],
+["19 mrt","22:00-23:00","TechMudde Fc","competitie","De Drie Maenen"],
+["02 apr","19:00-20:00","ACM","vriendschappelijk","Walvis"],
+["09 apr","21:00-22:00","Los Amigos","competitie","Bakwetering"],
+["16 apr","21:00-22:00","Wilco","vriendschappelijk","Walvis"],
+["23 apr","21:00-22:00","VHL veteranen","competitie","De Drie Maenen"],
+["14 mei","20:00-21:00","V.W.A.B.","competitie","De Drie Maenen"],
+["21 mei","20:00-21:00","Barbier voetBal","competitie","De Drie Maenen"],
+["04 jun","21:00-22:00","Dion Blonk","vriendschappelijk","Walvis"],
+["18 jun","21:00-22:00","ACM","vriendschappelijk","Walvis"],
+["02 jul","21:00-22:00","Jona?","vriendschappelijk","Walvis"],
+["16 jul","19:00-20:00","ACM","vriendschappelijk","Walvis"]
+
+];
+
+
+let players = [];
+let results = {};
+let selectedMatch = null;
+
+
+/* ------------------------------
+   OPSLAAN IN DE BROWSER
+-------------------------------- */
+
+function saveData() {
+
+    localStorage.setItem(
+        "cetus_players",
+        JSON.stringify(players)
+    );
+
+    localStorage.setItem(
+        "cetus_results",
+        JSON.stringify(results)
+    );
+
+}
+
+
+function loadData() {
+
+    players =
+        JSON.parse(
+            localStorage.getItem("cetus_players") || "[]"
+        );
+
+    results =
+        JSON.parse(
+            localStorage.getItem("cetus_results") || "{}"
+        );
+
+}
+
+
+/* ------------------------------
+   WEDSTRIJDEN
+-------------------------------- */
+
+function renderMatches() {
+
+    const filter =
+        document.getElementById("filter").value;
+
+    const list =
+        document.getElementById("matchesList");
+
+    list.innerHTML = "";
+
+    schedule.forEach((match,index) => {
+
+        const result = results[index];
+
+        if(filter === "open" && result)
+            return;
+
+        if(filter === "played" && !result)
+            return;
+
+
+        let resultText = "–";
+        let resultClass = "";
+
+        if(result) {
+
+            resultText =
+                result.cetus + " - " + result.opponentScore;
+
+            if(result.cetus > result.opponentScore)
+                resultClass = "win";
+
+            else if(result.cetus === result.opponentScore)
+                resultClass = "draw";
+
+            else
+                resultClass = "loss";
+
+        }
+
+
+        const button =
+            document.createElement("button");
+
+        button.className = "match";
+
+        button.innerHTML = `
+
+            <div class="match-top">
+
+                <div>
+
+                    <div class="opponent">
+                        ${match[2]}
+                    </div>
+
+                    <div class="match-info">
+                        ${match[0]} · ${match[1]}
+                    </div>
+
+                    <div class="badge">
+                        ${match[3]} · ${match[4]}
+                    </div>
+
+                </div>
+
+                <div class="result ${resultClass}">
+                    ${resultText}
+                </div>
+
+            </div>
+
+        `;
+
+        button.addEventListener(
+            "click",
+            () => openMatch(index)
+        );
+
+        list.appendChild(button);
+
+    });
+
+
+    if(!list.children.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                Geen wedstrijden gevonden.
+            </div>`;
+
+    }
+
+}
+
+
+/* ------------------------------
+   WEDSTRIJD OPENEN
+-------------------------------- */
+
+function openMatch(index) {
+
+    selectedMatch = index;
+
+    const match = schedule[index];
+
+    const result =
+        results[index] || {
+            cetus: "",
+            opponentScore: "",
+            scorers: []
+        };
+
+
+    document.getElementById("modalTitle").textContent =
+        "Cetus - " + match[2];
+
+    document.getElementById("modalInfo").textContent =
+        match[0] + " · " +
+        match[1] + " · " +
+        match[4];
+
+    document.getElementById("opponentName").textContent =
+        match[2];
+
+    document.getElementById("cetusScore").value =
+        result.cetus;
+
+    document.getElementById("opponentScore").value =
+        result.opponentScore;
+
+
+    renderScorers(
+        result.scorers || []
+    );
+
+
+    document
+        .getElementById("modal")
+        .classList.add("show");
+
+}
+
+
+/* ------------------------------
+   DOELPUNTENMAKERS
+-------------------------------- */
+
+function renderScorers(scorers) {
+
+    const container =
+        document.getElementById("scorersEditor");
+
+    container.innerHTML = "";
+
+
+    scorers.forEach((player,index) => {
+
+        addScorerRow(player);
+
+    });
+
+}
+
+
+function addScorerRow(value = "") {
+
+    const container =
+        document.getElementById("scorersEditor");
+
+
+    const row =
+        document.createElement("div");
+
+    row.className = "scorer-row";
+
+
+    const select =
+        document.createElement("select");
+
+    select.className = "scorer-select";
+
+
+    const empty =
+        document.createElement("option");
+
+    empty.value = "";
+    empty.textContent = "Kies speler";
+
+    select.appendChild(empty);
+
+
+    players.forEach(player => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = player;
+        option.textContent = player;
+
+        if(player === value)
+            option.selected = true;
+
+        select.appendChild(option);
+
+    });
+
+
+    const remove =
+        document.createElement("button");
+
+    remove.type = "button";
+    remove.textContent = "×";
+    remove.className = "delete";
+
+    remove.addEventListener(
+        "click",
+        () => row.remove()
+    );
+
+
+    row.appendChild(select);
+    row.appendChild(remove);
+
+    container.appendChild(row);
+
+}
+
+
+/* ------------------------------
+   RESULTAAT OPSLAAN
+-------------------------------- */
+
+document
+.getElementById("resultForm")
+.addEventListener("submit",function(event) {
+
+    event.preventDefault();
+
+
+    const cetus =
+        Number(
+            document.getElementById("cetusScore").value
+        );
+
+    const opponent =
+        Number(
+            document.getElementById("opponentScore").value
+        );
+
+
+    const scorers =
+        [...document.querySelectorAll(".scorer-select")]
+        .map(select => select.value)
+        .filter(Boolean);
+
+
+    if(scorers.length > cetus) {
+
+        alert(
+            "Je hebt meer doelpuntenmakers ingevuld dan Cetus doelpunten heeft."
+        );
+
+        return;
+
+    }
+
+
+    results[selectedMatch] = {
+
+        cetus: cetus,
+
+        opponentScore: opponent,
+
+        scorers: scorers,
+
+        opponent:
+            schedule[selectedMatch][2],
+
+        type:
+            schedule[selectedMatch][3]
+
+    };
+
+
+    saveData();
+
+    closeModal();
+
+    renderAll();
+
+});
+
+
+/* ------------------------------
+   MODAL SLUITEN
+-------------------------------- */
+
+function closeModal() {
+
+    document
+        .getElementById("modal")
+        .classList.remove("show");
+
+}
+
+
+document
+.getElementById("closeModal")
+.addEventListener("click",closeModal);
+
+
+document
+.getElementById("modal")
+.addEventListener("click",function(event) {
+
+    if(event.target === this)
+        closeModal();
+
+});
+
+
+document
+.getElementById("addScorer")
+.addEventListener(
+    "click",
+    () => addScorerRow()
+);
+
+
+/* ------------------------------
+   STAND
+-------------------------------- */
+
+function renderStand() {
+
+    const teams = {};
+
+
+    function createTeam(name) {
+
+        if(!teams[name]) {
+
+            teams[name] = {
+
+                games: 0,
+                wins: 0,
+                draws: 0,
+                losses: 0,
+                goalsFor: 0,
+                goalsAgainst: 0,
+                points: 0
+
+            };
+
+        }
+
+        return teams[name];
+
+    }
+
+
+    Object.values(results).forEach(result => {
+
+        if(result.type !== "competitie")
+            return;
+
+
+        const cetus =
+            createTeam("Cetus");
+
+        const opponent =
+            createTeam(result.opponent);
+
+
+        cetus.games++;
+        opponent.games++;
+
+        cetus.goalsFor += result.cetus;
+        cetus.goalsAgainst += result.opponentScore;
+
+        opponent.goalsFor += result.opponentScore;
+        opponent.goalsAgainst += result.cetus;
+
+
+        if(result.cetus > result.opponentScore) {
+
+            cetus.wins++;
+            cetus.points += 3;
+
+            opponent.losses++;
+
+        }
+
+        else if(result.cetus === result.opponentScore) {
+
+            cetus.draws++;
+            cetus.points++;
+
+            opponent.draws++;
+            opponent.points++;
+
+        }
+
+        else {
+
+            cetus.losses++;
+
+            opponent.wins++;
+            opponent.points += 3;
+
+        }
+
+    });
+
+
+    const sorted =
+        Object.entries(teams)
+        .sort((a,b) => {
+
+            if(b[1].points !== a[1].points)
+                return b[1].points - a[1].points;
+
+            return (
+                (b[1].goalsFor - b[1].goalsAgainst) -
+                (a[1].goalsFor - a[1].goalsAgainst)
+            );
+
+        });
+
+
+    const body =
+        document.getElementById("standBody");
+
+    body.innerHTML = "";
+
+
+    sorted.forEach(([name,team],index) => {
+
+        const row =
+            document.createElement("tr");
+
+
+        if(name === "Cetus")
+            row.className = "cetus-row";
+
+
+        const diff =
+            team.goalsFor -
+            team.goalsAgainst;
+
+
+        row.innerHTML = `
+
+            <td>${index + 1}</td>
+
+            <td>${name}</td>
+
+            <td>${team.games}</td>
+
+            <td>${team.wins}</td>
+
+            <td>${team.draws}</td>
+
+            <td>${team.losses}</td>
+
+            <td>${team.goalsFor}</td>
+
+            <td>${team.goalsAgainst}</td>
+
+            <td>${diff}</td>
+
+            <td><strong>${team.points}</strong></td>
+
+        `;
+
+
+        body.appendChild(row);
+
+    });
+
+
+    if(!sorted.length) {
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="10">
+                    Nog geen wedstrijden ingevoerd.
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* ------------------------------
+   STATISTIEKEN
+-------------------------------- */
+
+function renderStats() {
+
+    let games = 0;
+    let goals = 0;
+    let wins = 0;
+    let draws = 0;
+    let losses = 0;
+
+
+    const scorers = {};
+
+
+    Object.values(results).forEach(result => {
+
+        games++;
+
+        goals += result.cetus;
+
+
+        if(result.cetus > result.opponentScore)
+            wins++;
+
+        else if(result.cetus === result.opponentScore)
+            draws++;
+
+        else
+            losses++;
+
+
+        (result.scorers || [])
+        .forEach(player => {
+
+            scorers[player] =
+                (scorers[player] || 0) + 1;
+
+        });
+
+    });
+
+
+    const percentage =
+        games === 0
+        ? 0
+        : Math.round((wins / games) * 100);
+
+
+    document.getElementById("statGames").textContent =
+        games;
+
+    document.getElementById("statGoals").textContent =
+        goals;
+
+    document.getElementById("statWins").textContent =
+        wins;
+
+    document.getElementById("statDraws").textContent =
+        draws;
+
+    document.getElementById("statLosses").textContent =
+        losses;
+
+    document.getElementById("statWinPercentage").textContent =
+        percentage + "%";
+
+
+    const list =
+        document.getElementById("scorerList");
+
+    list.innerHTML = "";
+
+
+    const sorted =
+        Object.entries(scorers)
+        .sort((a,b) => b[1] - a[1]);
+
+
+    if(!sorted.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                Nog geen doelpuntenmakers.
+            </div>`;
+
+        return;
+
+    }
+
+
+    sorted.forEach(([player,goals],index) => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "scorer";
+
+        row.innerHTML = `
+
+            <span>
+                ${index + 1}. ${player}
+            </span>
+
+            <strong>
+                ${goals}
+            </strong>
+
+        `;
+
+        list.appendChild(row);
+
+    });
+
+}
+
+
+/* ------------------------------
+   TEAM
+-------------------------------- */
+
+function renderTeam() {
+
+    const list =
+        document.getElementById("playerList");
+
+    list.innerHTML = "";
+
+
+    if(!players.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                Nog geen spelers toegevoegd.
+            </div>`;
+
+        return;
+
+    }
+
+
+    players.forEach((player,index) => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "player";
+
+
+        row.innerHTML = `
+
+            <span>${player}</span>
+
+            <button
+                class="delete"
+                type="button"
+            >
+                Verwijder
+            </button>
+
+        `;
+
+
+        row
+        .querySelector(".delete")
+        .addEventListener("click",() => {
+
+            players.splice(index,1);
+
+            saveData();
+
+            renderTeam();
+
+        });
+
+
+        list.appendChild(row);
+
+    });
+
+}
+
+
+document
+.getElementById("playerForm")
+.addEventListener("submit",function(event) {
+
+    event.preventDefault();
+
+
+    const input =
+        document.getElementById("playerName");
+
+
+    const name =
+        input.value.trim();
+
+
+    if(!name)
+        return;
+
+
+    if(players.includes(name)) {
+
+        alert("Deze speler staat al in het team.");
+
+        return;
+
+    }
+
+
+    players.push(name);
+
+    players.sort();
+
+
+    input.value = "";
+
+    saveData();
+
+    renderTeam();
+
+});
+
+
+/* ------------------------------
+   TABS
+-------------------------------- */
+
+document
+.querySelectorAll(".tab")
+.forEach(button => {
+
+    button.addEventListener("click",function() {
+
+        document
+        .querySelectorAll(".tab")
+        .forEach(tab =>
+            tab.classList.remove("active")
+        );
+
+
+        document
+        .querySelectorAll(".view")
+        .forEach(view =>
+            view.classList.remove("active")
+        );
+
+
+        this.classList.add("active");
+
+
+        document
+        .getElementById(this.dataset.view)
+        .classList.add("active");
+
+    });
+
+});
+
+
+/* ------------------------------
+   FILTER
+-------------------------------- */
+
+document
+.getElementById("filter")
+.addEventListener(
+    "change",
+    renderMatches
+);
+
+
+/* ------------------------------
+   ALLES RENDEREN
+-------------------------------- */
+
+function renderAll() {
+
+    renderMatches();
+    renderStand();
+    renderStats();
+    renderTeam();
+
+}
+
+
+/* ------------------------------
+   START
+-------------------------------- */
+
+loadData();
+renderAll();
+
+</script>
+
+</body>
+</html>
