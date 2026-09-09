@@ -187,11 +187,13 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 
   <div class="big-stat">
     <div class="card"><div class="big-number" id="statGames">0</div><div class="stat-label">wedstrijden</div></div>
-    <div class="card"><div class="big-number" id="statGoals">0</div><div class="stat-label">doelpunten</div></div>
     <div class="card"><div class="big-number" id="statWins">0</div><div class="stat-label">gewonnen</div></div>
     <div class="card"><div class="big-number" id="statDraws">0</div><div class="stat-label">gelijk</div></div>
     <div class="card"><div class="big-number" id="statLosses">0</div><div class="stat-label">verloren</div></div>
     <div class="card"><div class="big-number" id="statWinPercentage">0%</div><div class="stat-label">winstpercentage</div></div>
+    <div class="card"><div class="big-number" id="statLossPercentage">0%</div><div class="stat-label">verliespercentage</div></div>
+    <div class="card"><div class="big-number" id="statGoals">0</div><div class="stat-label">doelpunten voor</div></div>
+    <div class="card"><div class="big-number" id="statGoalsAgainst">0</div><div class="stat-label">doelpunten tegen</div></div>
   </div>
 
   <div class="card" style="margin-top:14px"><h3 class="card-title">Topscorers</h3><div id="scorersContainer"></div></div>
@@ -376,20 +378,25 @@ function renderLastMatch(){
 }
 function renderStats(){
   let played=matches.filter(m=>results[m.id]&&(statsScope==="all"||(statsScope==="competition"&&m.type==="Competitie")||(statsScope==="friendly"&&m.type==="Vriendschappelijk")));
-  let goals=0,wins=0,draws=0,losses=0;
+  let goals=0,goalsAgainst=0,wins=0,draws=0,losses=0;
   played.forEach(m=>{
     let r=results[m.id];
     goals+=r.cetus;
+    goalsAgainst+=r.opponent;
     if(r.cetus>r.opponent)wins++;
     else if(r.cetus<r.opponent)losses++;
     else draws++;
   });
+  const winPercentage=played.length?Math.round(wins/played.length*100):0;
+  const lossPercentage=played.length?Math.round(losses/played.length*100):0;
   document.getElementById("statGames").textContent=played.length;
   document.getElementById("statGoals").textContent=goals;
+  document.getElementById("statGoalsAgainst").textContent=goalsAgainst;
   document.getElementById("statWins").textContent=wins;
   document.getElementById("statDraws").textContent=draws;
   document.getElementById("statLosses").textContent=losses;
-  document.getElementById("statWinPercentage").textContent=(played.length?Math.round(wins/played.length*100):0)+"%";
+  document.getElementById("statWinPercentage").textContent=winPercentage+"%";
+  document.getElementById("statLossPercentage").textContent=lossPercentage+"%";
 
   const allPlayed=matches.filter(m=>results[m.id]);
   const allWins=allPlayed.filter(m=>results[m.id].cetus>results[m.id].opponent).length;
