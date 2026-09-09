@@ -138,9 +138,9 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
   <div id="nextMatchContainer"></div>
 
   <div class="stat-grid">
-    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7 2 2.5-1 3.2h-3L9 9.5z"/><path d="m12 12.7 2.5 1.8M10 12.7l-2.5 1.8M10 9.5l-1.5-2M14 9.5l1.5-2"/></svg></div><div class="stat-number" id="homeGames">0</div><div class="stat-label">wedstrijden</div></div>
+    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7 2.1 1.5-.8 2.5h-2.6l-.8-2.5z"/><path d="m12 7V4.5M9.9 11 7.5 12.5M14.1 11l2.4 1.5M10.7 8.5 9 6.4M13.3 8.5 15 6.4M11.3 11l-1.4 3.8M12.7 11l1.4 3.8"/></svg></div><div class="stat-number" id="homeGames">0</div><div class="stat-label">wedstrijden</div></div>
     <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M7 5h10v3c0 3-2 5-5 5s-5-2-5-5z"/><path d="M7 7H4v1c0 2.5 1.5 4 4 4M17 7h3v1c0 2.5-1.5 4-4 4"/><path d="M12 13v4M8 21h8M9 17h6"/></svg></div><div class="stat-number" id="homeWins">0</div><div class="stat-label">gewonnen</div></div>
-    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 10h16M4 14h16M8 6v12M12 6v12M16 6v12"/></svg></div><div class="stat-number" id="homeGoalDiff">0 - 0</div><div class="stat-label">doelsaldo</div></div>
+    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M4 9h16M4 13h16M8 5v14M12 5v14M16 5v14"/><path d="M4 19 7 16M20 19l-3-3"/></svg></div><div class="stat-number" id="homeGoalDiff">0 - 0</div><div class="stat-label">doelsaldo</div></div>
   </div>
 
   <div class="card">
@@ -263,6 +263,10 @@ const matches = [
 
 let players=JSON.parse(localStorage.getItem("cetus_players"))||["Speler 1","Speler 2","Speler 3","Speler 4","Speler 5"];
 let results=JSON.parse(localStorage.getItem("cetus_results"))||{};
+if(!results[1]){
+  results[1]={cetus:3,opponent:4,scorers:[]};
+  localStorage.setItem("cetus_results",JSON.stringify(results));
+}
 let settings=JSON.parse(localStorage.getItem("cetus_settings"))||{competition:true,friendly:true};
 let currentMatchId=null,currentFilter="all",statsScope="all";
 
@@ -296,7 +300,7 @@ function formatDate(s){
 function formatLongDate(s){return new Date(s+"T12:00:00").toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"})}
 function getUpcomingMatches(){
   const today=new Date();today.setHours(0,0,0,0);
-  return matches.filter(m=>isVisible(m)&&new Date(m.date+"T12:00:00")>=today&&!results[m.id]).sort((a,b)=>a.date.localeCompare(b.date));
+  return matches.filter(m=>isVisible(m)&&new Date(m.date+"T12:00:00")>=today).sort((a,b)=>a.date.localeCompare(b.date));
 }
 function renderNextMatch(){
   const c=document.getElementById("nextMatchContainer"),up=getUpcomingMatches();
@@ -314,8 +318,8 @@ function setMatchFilter(filter,button){
 }
 function renderMatches(){
   const c=document.getElementById("matchesContainer");let filtered=matches.filter(isVisible),today=new Date();today.setHours(0,0,0,0);
-  if(currentFilter==="upcoming")filtered=filtered.filter(m=>new Date(m.date+"T12:00:00")>=today&&!results[m.id]);
-  if(currentFilter==="played")filtered=filtered.filter(m=>results[m.id]);
+  if(currentFilter==="upcoming")filtered=filtered.filter(m=>new Date(m.date+"T12:00:00")>=today);
+  if(currentFilter==="played")filtered=filtered.filter(m=>new Date(m.date+"T12:00:00")<today||results[m.id]);
   const grouped={};
   filtered.forEach(m=>{let d=new Date(m.date+"T12:00:00"),key=`${d.getFullYear()}-${d.getMonth()}`;if(!grouped[key])grouped[key]={title:d.toLocaleDateString("nl-NL",{month:"long",year:"numeric"}),matches:[]};grouped[key].matches.push(m)});
   if(!Object.keys(grouped).length){c.innerHTML='<div class="card empty">Geen wedstrijden gevonden met deze filters.</div>';return}
@@ -365,9 +369,15 @@ function saveResult(){
   localStorage.setItem("cetus_results",JSON.stringify(results));closeModal();renderAll();
 }
 function renderLastMatch(){
-  const c=document.getElementById("lastMatchContainer"),played=matches.filter(m=>results[m.id]).sort((a,b)=>b.date.localeCompare(a.date));
+  const c=document.getElementById("lastMatchContainer"),today=new Date();today.setHours(0,0,0,0);
+  const played=matches.filter(m=>new Date(m.date+"T12:00:00")<today).sort((a,b)=>b.date.localeCompare(a.date));
   if(!played.length){c.innerHTML='Nog geen wedstrijden gespeeld.<div style="margin-top:14px"><button class="secondary-button" style="width:100%" onclick="showPage(\'matches\',document.querySelectorAll(\'.nav-button\')[1])">Uitslag invoeren</button></div>';return}
-  let m=played[0],r=results[m.id],out=r.cetus>r.opponent?"win":r.cetus<r.opponent?"loss":"draw",label=out==="win"?"Gewonnen":out==="loss"?"Verloren":"Gelijkspel";
+  let m=played[0],r=results[m.id];
+  if(!r){
+    c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-weight:800;font-size:18px">Cetus - ${escapeHtml(m.opponent)}</div><div style="color:var(--muted);font-size:13px;margin-top:5px">${formatLongDate(m.date)} · ${m.type}</div></div><div style="font-size:15px;font-weight:700;color:var(--red)">Uitslag ontbreekt</div></div><button class="secondary-button" style="width:100%;margin-top:14px" onclick="openResultModal(${m.id})">Uitslag invoeren</button>`;
+    return;
+  }
+  let out=r.cetus>r.opponent?"win":r.cetus<r.opponent?"loss":"draw",label=out==="win"?"Gewonnen":out==="loss"?"Verloren":"Gelijkspel";
   c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-weight:800;font-size:18px">Cetus - ${escapeHtml(m.opponent)}</div><div style="color:var(--muted);font-size:13px;margin-top:5px">${formatLongDate(m.date)} · ${m.type}</div></div><div class="result ${out}" style="font-size:23px">${r.cetus} - ${r.opponent}</div></div><div style="margin-top:12px;color:var(--muted);font-size:13px">${label}</div><button class="secondary-button" style="width:100%;margin-top:14px" onclick="openResultModal(${m.id})">Uitslag aanpassen</button>`;
 }
 function renderStats(){
