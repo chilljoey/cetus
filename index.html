@@ -8,1913 +8,413 @@
 
 <style>
 :root {
-  --red: #b04a4a;
-  --red-dark: #963d3d;
-  --red-light: #f7eaea;
-  --red-soft: #fcf4f4;
-  --bg: #f4f3f1;
-  --card: #ffffff;
-  --text: #20242a;
-  --muted: #737981;
-  --border: #e7e6e4;
-  --green: #4f8064;
-  --blue: #617b9c;
-  --shadow: 0 4px 18px rgba(25, 25, 25, 0.06);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  background: var(--bg);
-}
-
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
-
-button,
-input,
-select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-.app {
-  max-width: 760px;
-  min-height: 100vh;
-  margin: 0 auto;
-  background: var(--bg);
-}
-
-/* =========================
-   HOME / HEADER
-========================= */
-
-.top-header {
-  background: white;
-  padding: 24px 20px 18px;
-  border-bottom: 1px solid var(--border);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.brand img {
-  width: 66px;
-  height: 66px;
-  object-fit: contain;
-}
-
-.brand-text h1 {
-  margin: 0;
-  font-size: 24px;
-  letter-spacing: 2px;
-}
-
-.brand-text p {
-  margin: 5px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-  letter-spacing: 2px;
-}
-
-.season {
-  margin-top: 18px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-/* =========================
-   CONTENT
-========================= */
-
-.content {
-  padding: 18px 16px 100px;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-.page-title {
-  margin: 6px 4px 18px;
-}
-
-.page-title h2 {
-  margin: 0;
-  font-size: 27px;
-}
-
-.page-title p {
-  margin: 5px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-/* =========================
-   HOME
-========================= */
-
-.hero-logo {
-  text-align: center;
-  padding: 8px 0 22px;
-}
-
-.hero-logo img {
-  width: 145px;
-  height: 145px;
-  object-fit: contain;
-}
-
-.hero-title {
-  margin: -4px 0 4px;
-  font-size: 35px;
-  letter-spacing: 5px;
-  font-weight: 800;
-}
-
-.hero-subtitle {
-  color: var(--muted);
-  letter-spacing: 4px;
-  font-size: 12px;
-}
-
-.next-match {
-  background: linear-gradient(145deg, #fff7f7, #ffffff);
-  border: 1px solid #f0dada;
-  border-radius: 20px;
-  padding: 18px;
-  box-shadow: var(--shadow);
-  margin-bottom: 16px;
-}
-
-.next-match-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.next-match-title {
-  color: var(--red);
-  font-weight: 700;
-  font-size: 17px;
-}
-
-.badge {
-  padding: 7px 11px;
-  border-radius: 10px;
-  background: var(--red-light);
-  color: var(--red-dark);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.badge.friendly {
-  background: #edf1f5;
-  color: #53667d;
-}
-
-.match-teams {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 8px;
-}
-
-.team-side {
-  text-align: center;
-  font-weight: 700;
-}
-
-.team-side img {
-  display: block;
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  margin: 0 auto 7px;
-}
-
-.team-side.opponent .opponent-icon {
-  width: 50px;
-  height: 50px;
-  margin: 0 auto 7px;
-  border-radius: 12px;
-  background: #e8ebee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #9aa1a8;
-  font-size: 25px;
-}
-
-.vs {
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.match-info {
-  margin-top: 17px;
-  padding-top: 15px;
-  border-top: 1px solid #eee1e1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 20px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.primary-button {
-  width: 100%;
-  margin-top: 17px;
-  border: 0;
-  border-radius: 12px;
-  padding: 13px;
-  background: var(--red);
-  color: white;
-  font-weight: 700;
-}
-
-.primary-button:hover {
-  background: var(--red-dark);
-}
-
-/* =========================
-   STAT CARDS
-========================= */
-
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.stat-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px 8px;
-  text-align: center;
-  box-shadow: var(--shadow);
-}
-
-.stat-icon {
-  font-size: 20px;
-  color: var(--red);
-}
-
-.stat-number {
-  font-size: 24px;
-  font-weight: 800;
-  margin-top: 7px;
-}
-
-.stat-label {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-/* =========================
-   CARDS
-========================= */
-
-.card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 17px;
-  margin-bottom: 14px;
-  box-shadow: var(--shadow);
-}
-
-.card-title {
-  margin: 0 0 14px;
-  font-size: 17px;
-}
-
-.empty {
-  color: var(--muted);
-  text-align: center;
-  padding: 20px 10px;
-}
-
-/* =========================
-   MATCH LIST
-========================= */
-
-.filters {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  background: #e9e8e6;
-  padding: 4px;
-  border-radius: 13px;
-  margin-bottom: 18px;
-}
-
-.filter-button {
-  border: 0;
-  background: transparent;
-  color: #62676d;
-  border-radius: 10px;
-  padding: 10px 5px;
-  font-weight: 600;
-}
-
-.filter-button.active {
-  background: white;
-  color: var(--red);
-  box-shadow: 0 2px 6px rgba(0,0,0,.06);
-}
-
-.month-title {
-  margin: 20px 5px 9px;
-  font-size: 17px;
-}
-
-.match-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: 68px 1fr auto;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 9px;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-}
-
-.date-box {
-  background: #f5f5f4;
-  border-radius: 11px;
-  padding: 9px 5px;
-  text-align: center;
-}
-
-.date-day {
-  font-size: 11px;
-  color: var(--muted);
-}
-
-.date-number {
-  font-weight: 800;
-  font-size: 17px;
-  margin: 2px 0;
-}
-
-.date-time {
-  font-size: 11px;
-  color: var(--muted);
-}
-
-.match-main {
-  min-width: 0;
-}
-
-.opponent-name {
-  font-weight: 700;
-  font-size: 15px;
-  margin-bottom: 5px;
-}
-
-.venue {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.match-right {
-  text-align: right;
-}
-
-.result {
-  font-size: 19px;
-  font-weight: 800;
-  margin-bottom: 7px;
-}
-
-.result.win {
-  color: var(--green);
-}
-
-.result.loss {
-  color: var(--red);
-}
-
-.result.draw {
-  color: var(--blue);
-}
-
-.chevron {
-  color: #a2a5a8;
-  font-size: 22px;
-}
-
-/* =========================
-   TABLE
-========================= */
-
-.table-wrap {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-th {
-  text-align: left;
-  color: var(--muted);
-  font-weight: 600;
-  padding: 9px 5px;
-  border-bottom: 1px solid var(--border);
-}
-
-td {
-  padding: 12px 5px;
-  border-bottom: 1px solid #f0f0ef;
-}
-
-td:not(:first-child),
-th:not(:first-child) {
-  text-align: center;
-}
-
-.position {
-  font-weight: 800;
-  width: 28px;
-}
-
-.our-team {
-  font-weight: 800;
-  color: var(--red);
-}
-
-/* =========================
-   STATISTICS
-========================= */
-
-.big-stat {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.big-stat .card {
-  text-align: center;
-  margin-bottom: 0;
-}
-
-.big-number {
-  font-size: 30px;
-  font-weight: 800;
-  color: var(--red);
-}
-
-.scorer-row {
-  display: grid;
-  grid-template-columns: 35px 1fr auto;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 0;
-  border-bottom: 1px solid #f0f0ef;
-}
-
-.scorer-row:last-child {
-  border-bottom: 0;
-}
-
-.scorer-position {
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.scorer-name {
-  font-weight: 700;
-}
-
-.scorer-goals {
-  font-weight: 800;
-  color: var(--red);
-}
-
-/* =========================
-   TEAM
-========================= */
-
-.player-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0ef;
-}
-
-.player-row:last-child {
-  border-bottom: 0;
-}
-
-.player-name {
-  font-weight: 700;
-}
-
-.delete-player {
-  border: 0;
-  background: #f5e8e8;
-  color: var(--red-dark);
-  border-radius: 8px;
-  padding: 7px 10px;
-  font-size: 12px;
-}
-
-.add-player {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.add-player input {
-  flex: 1;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 11px;
-  outline: none;
-}
-
-.add-player input:focus {
-  border-color: var(--red);
-}
-
-.add-player button {
-  border: 0;
-  background: var(--red);
-  color: white;
-  border-radius: 10px;
-  padding: 0 16px;
-  font-weight: 700;
-}
-
-/* =========================
-   BOTTOM NAV
-========================= */
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(760px, 100%);
-  background: rgba(255,255,255,.97);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid var(--border);
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  padding: 8px 5px max(8px, env(safe-area-inset-bottom));
-  z-index: 20;
-}
-
-.nav-button {
-  border: 0;
-  background: transparent;
-  color: #7c8288;
-  padding: 5px 2px;
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.nav-icon {
-  display: block;
-  font-size: 19px;
-  margin-bottom: 3px;
-}
-
-.nav-button.active {
-  color: var(--red);
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(25,25,25,.45);
-  z-index: 50;
-  padding: 20px;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.modal.show {
-  display: flex;
-}
-
-.modal-box {
-  width: min(600px, 100%);
-  max-height: 90vh;
-  overflow-y: auto;
-  background: white;
-  border-radius: 22px 22px 0 0;
-  padding: 21px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.modal-header h3 {
-  margin: 0;
-  font-size: 21px;
-}
-
-.close-button {
-  border: 0;
-  background: #f1f1f0;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  font-size: 18px;
-}
-
-.score-inputs {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 10px;
-  align-items: end;
-  margin-bottom: 20px;
-}
-
-.score-team {
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.score-input {
-  width: 100%;
-  margin-top: 7px;
-  padding: 13px;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 800;
-}
-
-.score-vs {
-  padding-bottom: 13px;
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.scorers-title {
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.scorer-input {
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 11px;
-  margin-bottom: 7px;
-  background: white;
-}
-
-.modal-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
-  margin-top: 16px;
-}
-
-.secondary-button,
-.save-button {
-  border: 0;
-  border-radius: 11px;
-  padding: 13px;
-  font-weight: 700;
-}
-
-.secondary-button {
-  background: #eeeeed;
-  color: #555a60;
-}
-
-.save-button {
-  background: var(--red);
-  color: white;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (min-width: 700px) {
-  .bottom-nav {
-    border-radius: 18px 18px 0 0;
-  }
-
-  .modal {
-    align-items: center;
-  }
-
-  .modal-box {
-    border-radius: 22px;
-  }
-}
+  --red:#b04a4a; --red-dark:#963d3d; --red-light:#f7eaea;
+  --bg:#f4f3f1; --card:#fff; --text:#20242a; --muted:#737981;
+  --border:#e7e6e4; --green:#4f8064; --blue:#617b9c;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit} button{cursor:pointer}
+.app{max-width:760px;min-height:100vh;margin:0 auto;background:var(--bg)}
+
+.top-header{background:#fff;padding:20px;border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:13px}
+.brand img{width:58px;height:58px;object-fit:contain}
+.brand-text h1{margin:0;font-size:23px;letter-spacing:2px}
+.brand-text p{margin:4px 0 0;color:var(--muted);font-size:11px;letter-spacing:2px}
+.season{margin-top:15px;color:var(--muted);font-size:13px}
+
+.content{padding:18px 16px 100px}
+.page{display:none}.page.active{display:block}
+.page-title{margin:6px 4px 18px}.page-title h2{margin:0;font-size:27px}
+.page-title p{margin:5px 0 0;color:var(--muted);font-size:14px}
+
+.hero-logo{text-align:center;padding:2px 0 16px}
+.hero-logo img{width:105px;height:105px;object-fit:contain}
+.hero-title{margin:-2px 0 4px;font-size:30px;letter-spacing:5px;font-weight:800}
+.hero-subtitle{color:var(--muted);letter-spacing:3px;font-size:11px}
+
+.next-match{background:linear-gradient(145deg,#fff7f7,#fff);border:1px solid #f0dada;border-radius:20px;padding:18px;box-shadow:0 4px 18px rgba(25,25,25,.06);margin-bottom:16px}
+.next-match-header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.next-match-title{color:var(--red);font-weight:700;font-size:17px}
+.badge{display:inline-block;padding:7px 11px;border-radius:10px;background:var(--red-light);color:var(--red-dark);font-size:12px;font-weight:700}
+.badge.friendly{background:#edf1f5;color:#53667d}
+.match-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.team-side{text-align:center;font-weight:700}
+.team-side img{display:block;width:50px;height:50px;object-fit:contain;margin:0 auto 7px}
+.opponent-icon{width:50px;height:50px;margin:0 auto 7px;border-radius:12px;background:#e8ebee;display:flex;align-items:center;justify-content:center;font-size:25px}
+.vs{color:var(--muted);font-size:13px;font-weight:700}
+.match-info{margin-top:17px;padding-top:15px;border-top:1px solid #eee1e1;display:flex;flex-wrap:wrap;gap:12px 20px;color:var(--muted);font-size:13px}
+.primary-button{width:100%;margin-top:17px;border:0;border-radius:12px;padding:13px;background:var(--red);color:#fff;font-weight:700}
+.primary-button:hover{background:var(--red-dark)}
+
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;box-shadow:0 4px 18px rgba(25,25,25,.06)}
+.stat-icon{font-size:19px;color:var(--red)}.stat-number{font-size:24px;font-weight:800;margin-top:7px}
+.stat-label{margin-top:4px;color:var(--muted);font-size:11px}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:17px;margin-bottom:14px;box-shadow:0 4px 18px rgba(25,25,25,.06)}
+.card-title{margin:0 0 14px;font-size:17px}.empty{color:var(--muted);text-align:center;padding:20px 10px}
+
+.filters{display:grid;grid-template-columns:repeat(3,1fr);background:#e9e8e6;padding:4px;border-radius:13px;margin-bottom:12px}
+.filter-button{border:0;background:transparent;color:#62676d;border-radius:10px;padding:10px 5px;font-weight:600}
+.filter-button.active{background:#fff;color:var(--red);box-shadow:0 2px 6px rgba(0,0,0,.06)}
+
+.category-settings{background:#fff;border:1px solid var(--border);border-radius:15px;padding:13px 14px;margin-bottom:18px;box-shadow:0 3px 12px rgba(25,25,25,.04)}
+.category-title{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px}
+.category-options{display:flex;gap:8px;flex-wrap:wrap}
+.category-toggle{border:1px solid var(--border);background:#f6f6f5;color:#6b7076;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700}
+.category-toggle.active{background:var(--red-light);border-color:#edcccc;color:var(--red-dark)}
+.category-toggle .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#b5b8bc;margin-right:6px}
+.category-toggle.active .dot{background:var(--red)}
+
+.month-title{margin:20px 5px 9px;font-size:17px}
+.match-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:12px;display:grid;grid-template-columns:68px 1fr auto;gap:12px;align-items:center;margin-bottom:9px;box-shadow:0 4px 18px rgba(25,25,25,.06);cursor:pointer}
+.date-box{background:#f5f5f4;border-radius:11px;padding:9px 5px;text-align:center}
+.date-day{font-size:11px;color:var(--muted)}.date-number{font-weight:800;font-size:17px;margin:2px 0}.date-time{font-size:11px;color:var(--muted)}
+.match-main{min-width:0}.opponent-name{font-weight:700;font-size:15px;margin-bottom:5px}.venue{color:var(--muted);font-size:12px}
+.match-right{text-align:right}.result{font-size:19px;font-weight:800;margin-bottom:7px}.result.win{color:var(--green)}.result.loss{color:var(--red)}.result.draw{color:var(--blue)}
+.chevron{color:#a2a5a8;font-size:22px}
+
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--muted);font-weight:600;padding:9px 5px;border-bottom:1px solid var(--border)}
+td{padding:12px 5px;border-bottom:1px solid #f0f0ef}
+td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weight:800;width:28px}.our-team{font-weight:800;color:var(--red)}
+
+.big-stat{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.big-stat .card{text-align:center;margin-bottom:0}
+.big-number{font-size:30px;font-weight:800;color:var(--red)}
+.scorer-row{display:grid;grid-template-columns:35px 1fr auto;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #f0f0ef}
+.scorer-row:last-child{border-bottom:0}.scorer-position{color:var(--muted);font-weight:700}.scorer-name{font-weight:700}.scorer-goals{font-weight:800;color:var(--red)}
+
+.player-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f0f0ef}
+.player-row:last-child{border-bottom:0}.player-name{font-weight:700}
+.delete-player{border:0;background:#f5e8e8;color:var(--red-dark);border-radius:8px;padding:7px 10px;font-size:12px}
+.add-player{display:flex;gap:8px;margin-top:14px}.add-player input{flex:1;border:1px solid var(--border);border-radius:10px;padding:11px;outline:none}
+.add-player input:focus{border-color:var(--red)}.add-player button{border:0;background:var(--red);color:#fff;border-radius:10px;padding:0 16px;font-weight:700}
+
+.section-switch{display:flex;background:#eee;padding:4px;border-radius:12px;margin-bottom:14px}
+.section-switch button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px;font-weight:700;color:var(--muted)}
+.section-switch button.active{background:#fff;color:var(--red);box-shadow:0 2px 6px rgba(0,0,0,.06)}
+
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 5px max(8px,env(safe-area-inset-bottom));z-index:20}
+.nav-button{border:0;background:transparent;color:#7c8288;padding:5px 2px;font-size:10px;font-weight:600}
+.nav-icon{display:block;font-size:19px;margin-bottom:3px}.nav-button.active{color:var(--red)}
+
+.modal{display:none;position:fixed;inset:0;background:rgba(25,25,25,.45);z-index:50;padding:20px;align-items:flex-end;justify-content:center}
+.modal.show{display:flex}.modal-box{width:min(600px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:21px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-header h3{margin:0;font-size:21px}
+.close-button{border:0;background:#f1f1f0;width:34px;height:34px;border-radius:50%;font-size:18px}
+.score-inputs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;margin-bottom:20px}
+.score-team{text-align:center;color:var(--muted);font-size:13px}.score-input{width:100%;margin-top:7px;padding:13px;border:1px solid var(--border);border-radius:11px;text-align:center;font-size:24px;font-weight:800}
+.score-vs{padding-bottom:13px;color:var(--muted);font-weight:700}.scorers-title{font-weight:700;margin-bottom:10px}
+.scorer-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:7px;background:#fff}
+.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.secondary-button,.save-button{border:0;border-radius:11px;padding:13px;font-weight:700}.secondary-button{background:#eeeeed;color:#555a60}.save-button{background:var(--red);color:#fff}
+
+@media (min-width:700px){.bottom-nav{border-radius:18px 18px 0 0}.modal{align-items:center}.modal-box{border-radius:22px}}
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
-  <!-- HEADER -->
-  <header class="top-header">
-    <div class="brand">
-      <img src="cetus-logo.png" alt="Cetus logo">
-      <div class="brand-text">
-        <h1>CETUS</h1>
-        <p>ZAALVOETBAL</p>
-      </div>
-    </div>
-    <div class="season">Seizoen 2026 / 2027</div>
-  </header>
+<header class="top-header">
+  <div class="brand">
+    <img src="cetus-logo.png" alt="Cetus logo">
+    <div class="brand-text"><h1>CETUS</h1><p>ZAALVOETBAL</p></div>
+  </div>
+  <div class="season">Seizoen 2026 / 2027</div>
+</header>
 
-  <main class="content">
+<main class="content">
 
-    <!-- HOME -->
-    <section id="home" class="page active">
-
-      <div class="hero-logo">
-        <img src="cetus-logo.png" alt="Cetus">
-        <div class="hero-title">CETUS</div>
-        <div class="hero-subtitle">ZAALVOETBAL 2026 / 2027</div>
-      </div>
-
-      <div id="nextMatchContainer"></div>
-
-      <div class="stat-grid">
-        <div class="stat-card">
-          <div class="stat-icon">🏆</div>
-          <div class="stat-number" id="homePosition">-</div>
-          <div class="stat-label">positie</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">⚽</div>
-          <div class="stat-number" id="homeGames">0</div>
-          <div class="stat-label">gespeeld</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">●</div>
-          <div class="stat-number" id="homePoints">0</div>
-          <div class="stat-label">punten</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 class="card-title">Laatste wedstrijd</h3>
-        <div id="lastMatchContainer" class="empty">
-          Nog geen wedstrijden gespeeld.
-        </div>
-      </div>
-
-    </section>
-
-    <!-- WEDSTRIJDEN -->
-    <section id="matches" class="page">
-
-      <div class="page-title">
-        <h2>Wedstrijden</h2>
-        <p>Seizoen 2026 / 2027</p>
-      </div>
-
-      <div class="filters">
-        <button class="filter-button active" onclick="setMatchFilter('all', this)">Alle</button>
-        <button class="filter-button" onclick="setMatchFilter('upcoming', this)">Aankomend</button>
-        <button class="filter-button" onclick="setMatchFilter('played', this)">Gespeeld</button>
-      </div>
-
-      <div id="matchesContainer"></div>
-
-    </section>
-
-    <!-- STAND -->
-    <section id="standings" class="page">
-
-      <div class="page-title">
-        <h2>Stand</h2>
-        <p>Alleen competitiewedstrijden tellen mee</p>
-      </div>
-
-      <div class="card">
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Team</th>
-                <th>G</th>
-                <th>W</th>
-                <th>G</th>
-                <th>V</th>
-                <th>DV</th>
-                <th>DT</th>
-                <th>P</th>
-              </tr>
-            </thead>
-            <tbody id="standingsBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- STATISTIEKEN -->
-    <section id="stats" class="page">
-
-      <div class="page-title">
-        <h2>Statistieken</h2>
-        <p>Prestaties van Cetus</p>
-      </div>
-
-      <div class="big-stat">
-        <div class="card">
-          <div class="big-number" id="statGames">0</div>
-          <div class="stat-label">wedstrijden</div>
-        </div>
-
-        <div class="card">
-          <div class="big-number" id="statGoals">0</div>
-          <div class="stat-label">doelpunten</div>
-        </div>
-
-        <div class="card">
-          <div class="big-number" id="statWins">0</div>
-          <div class="stat-label">gewonnen</div>
-        </div>
-
-        <div class="card">
-          <div class="big-number" id="statDraws">0</div>
-          <div class="stat-label">gelijk</div>
-        </div>
-
-        <div class="card">
-          <div class="big-number" id="statLosses">0</div>
-          <div class="stat-label">verloren</div>
-        </div>
-
-        <div class="card">
-          <div class="big-number" id="statWinPercentage">0%</div>
-          <div class="stat-label">winstpercentage</div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:14px;">
-        <h3 class="card-title">Topscorers</h3>
-        <div id="scorersContainer"></div>
-      </div>
-
-    </section>
-
-    <!-- TEAM -->
-    <section id="team" class="page">
-
-      <div class="page-title">
-        <h2>Team</h2>
-        <p>Spelers van Cetus</p>
-      </div>
-
-      <div class="card">
-
-        <h3 class="card-title">Spelers</h3>
-
-        <div id="playersContainer"></div>
-
-        <div class="add-player">
-          <input id="newPlayerInput" type="text" placeholder="Naam speler">
-          <button onclick="addPlayer()">Toevoegen</button>
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-</div>
-
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-
-  <button class="nav-button active" onclick="showPage('home', this)">
-    <span class="nav-icon">⌂</span>
-    Home
-  </button>
-
-  <button class="nav-button" onclick="showPage('matches', this)">
-    <span class="nav-icon">▣</span>
-    Wedstrijden
-  </button>
-
-  <button class="nav-button" onclick="showPage('standings', this)">
-    <span class="nav-icon">♜</span>
-    Stand
-  </button>
-
-  <button class="nav-button" onclick="showPage('stats', this)">
-    <span class="nav-icon">▥</span>
-    Statistieken
-  </button>
-
-  <button class="nav-button" onclick="showPage('team', this)">
-    <span class="nav-icon">♟</span>
-    Team
-  </button>
-
-</nav>
-
-<!-- RESULT MODAL -->
-<div id="resultModal" class="modal">
-
-  <div class="modal-box">
-
-    <div class="modal-header">
-      <h3 id="modalTitle">Uitslag invoeren</h3>
-      <button class="close-button" onclick="closeModal()">×</button>
-    </div>
-
-    <div class="score-inputs">
-
-      <div class="score-team">
-        CETUS
-        <input id="cetusScore" class="score-input" type="number" min="0" value="0">
-      </div>
-
-      <div class="score-vs">VS</div>
-
-      <div class="score-team">
-        <span id="modalOpponent">Tegenstander</span>
-        <input id="opponentScore" class="score-input" type="number" min="0" value="0">
-      </div>
-
-    </div>
-
-    <div class="scorers-title">Doelpuntenmakers</div>
-
-    <div id="scorersInputs"></div>
-
-    <div class="modal-actions">
-      <button class="secondary-button" onclick="closeModal()">Annuleren</button>
-      <button class="save-button" onclick="saveResult()">Opslaan</button>
-    </div>
-
+<section id="home" class="page active">
+  <div class="hero-logo">
+    <img src="cetus-logo.png" alt="Cetus">
+    <div class="hero-title">CETUS</div>
+    <div class="hero-subtitle">ZAALVOETBAL 2026 / 2027</div>
   </div>
 
+  <div id="nextMatchContainer"></div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-number" id="homePosition">-</div><div class="stat-label">positie</div></div>
+    <div class="stat-card"><div class="stat-icon">⚽</div><div class="stat-number" id="homeGames">0</div><div class="stat-label">competitie</div></div>
+    <div class="stat-card"><div class="stat-icon">●</div><div class="stat-number" id="homePoints">0</div><div class="stat-label">punten</div></div>
+  </div>
+
+  <div class="card">
+    <h3 class="card-title">Laatste wedstrijd</h3>
+    <div id="lastMatchContainer" class="empty">Nog geen wedstrijden gespeeld.</div>
+  </div>
+</section>
+
+<section id="matches" class="page">
+  <div class="page-title"><h2>Wedstrijden</h2><p>Seizoen 2026 / 2027</p></div>
+
+  <div class="category-settings">
+    <div class="category-title">Wedstrijden tonen</div>
+    <div class="category-options">
+      <button id="toggleCompetition" class="category-toggle active" onclick="toggleCategory('competition')"><span class="dot"></span>Competitie</button>
+      <button id="toggleFriendly" class="category-toggle active" onclick="toggleCategory('friendly')"><span class="dot"></span>Vriendschappelijk</button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-button active" onclick="setMatchFilter('all', this)">Alle</button>
+    <button class="filter-button" onclick="setMatchFilter('upcoming', this)">Aankomend</button>
+    <button class="filter-button" onclick="setMatchFilter('played', this)">Gespeeld</button>
+  </div>
+  <div id="matchesContainer"></div>
+</section>
+
+<section id="standings" class="page">
+  <div class="page-title"><h2>Stand</h2><p>Alleen competitiewedstrijden tellen mee</p></div>
+  <div class="card"><div class="table-wrap">
+    <table><thead><tr><th>#</th><th>Team</th><th>G</th><th>W</th><th>G</th><th>V</th><th>DV</th><th>DT</th><th>P</th></tr></thead>
+    <tbody id="standingsBody"></tbody></table>
+  </div></div>
+</section>
+
+<section id="stats" class="page">
+  <div class="page-title"><h2>Statistieken</h2><p>Prestaties van Cetus</p></div>
+
+  <div class="section-switch">
+    <button id="statsAllButton" class="active" onclick="setStatsScope('all')">Alle wedstrijden</button>
+    <button id="statsCompetitionButton" onclick="setStatsScope('competition')">Competitie</button>
+    <button id="statsFriendlyButton" onclick="setStatsScope('friendly')">Vriendschappelijk</button>
+  </div>
+
+  <div class="big-stat">
+    <div class="card"><div class="big-number" id="statGames">0</div><div class="stat-label">wedstrijden</div></div>
+    <div class="card"><div class="big-number" id="statGoals">0</div><div class="stat-label">doelpunten</div></div>
+    <div class="card"><div class="big-number" id="statWins">0</div><div class="stat-label">gewonnen</div></div>
+    <div class="card"><div class="big-number" id="statDraws">0</div><div class="stat-label">gelijk</div></div>
+    <div class="card"><div class="big-number" id="statLosses">0</div><div class="stat-label">verloren</div></div>
+    <div class="card"><div class="big-number" id="statWinPercentage">0%</div><div class="stat-label">winstpercentage</div></div>
+  </div>
+
+  <div class="card" style="margin-top:14px"><h3 class="card-title">Topscorers</h3><div id="scorersContainer"></div></div>
+</section>
+
+<section id="team" class="page">
+  <div class="page-title"><h2>Team</h2><p>Spelers van Cetus</p></div>
+  <div class="card">
+    <h3 class="card-title">Spelers</h3>
+    <div id="playersContainer"></div>
+    <div class="add-player"><input id="newPlayerInput" type="text" placeholder="Naam speler"><button onclick="addPlayer()">Toevoegen</button></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-button active" onclick="showPage('home',this)"><span class="nav-icon">⌂</span>Home</button>
+  <button class="nav-button" onclick="showPage('matches',this)"><span class="nav-icon">▣</span>Wedstrijden</button>
+  <button class="nav-button" onclick="showPage('standings',this)"><span class="nav-icon">♜</span>Stand</button>
+  <button class="nav-button" onclick="showPage('stats',this)"><span class="nav-icon">▥</span>Statistieken</button>
+  <button class="nav-button" onclick="showPage('team',this)"><span class="nav-icon">♟</span>Team</button>
+</nav>
+
+<div id="resultModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-header"><h3 id="modalTitle">Uitslag invoeren</h3><button class="close-button" onclick="closeModal()">×</button></div>
+    <div class="score-inputs">
+      <div class="score-team">CETUS<input id="cetusScore" class="score-input" type="number" min="0" value="0"></div>
+      <div class="score-vs">VS</div>
+      <div class="score-team"><span id="modalOpponent">Tegenstander</span><input id="opponentScore" class="score-input" type="number" min="0" value="0"></div>
+    </div>
+    <div class="scorers-title">Doelpuntenmakers</div>
+    <div id="scorersInputs"></div>
+    <div class="modal-actions"><button class="secondary-button" onclick="closeModal()">Annuleren</button><button class="save-button" onclick="saveResult()">Opslaan</button></div>
+  </div>
 </div>
 
 <script>
-
-/* =====================================================
-   WEDSTRIJDEN
-===================================================== */
-
 const matches = [
-  {id:1, date:"2026-09-04", time:"20:00", opponent:"Jona", type:"Competitie", venue:"Walvis"},
-  {id:2, date:"2026-09-18", time:"21:00", opponent:"Tweede Jeugd", type:"Competitie", venue:"Bakwetering"},
-  {id:3, date:"2026-09-25", time:"21:00", opponent:"Bierussia Dortmund", type:"Competitie", venue:"Bakwetering"},
-  {id:4, date:"2026-10-09", time:"20:00", opponent:"Atletic Bierbao", type:"Competitie", venue:"Bakwetering"},
-  {id:5, date:"2026-10-16", time:"20:00", opponent:"Boca Seniors", type:"Competitie", venue:"Bakwetering"},
-  {id:6, date:"2026-10-30", time:"21:00", opponent:"Timo", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:7, date:"2026-11-06", time:"20:00", opponent:"TechMudde Fc", type:"Competitie", venue:"De Drie Maenen"},
-  {id:8, date:"2026-11-20", time:"19:00", opponent:"Los Amigos", type:"Competitie", venue:"Bakwetering"},
-  {id:9, date:"2026-11-27", time:"21:00", opponent:"Dion Blonk", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:10, date:"2026-12-04", time:"20:00", opponent:"VHL veteranen", type:"Competitie", venue:"De Drie Maenen"},
-  {id:11, date:"2026-12-11", time:"19:00", opponent:"Barbier voetBal", type:"Competitie", venue:"Bakwetering"},
-  {id:12, date:"2027-01-08", time:"19:00", opponent:"V.W.A.B.", type:"Competitie", venue:"De Drie Maenen"},
-  {id:13, date:"2027-01-15", time:"20:00", opponent:"Tweede Jeugd", type:"Competitie", venue:"De Drie Maenen"},
-  {id:14, date:"2027-01-22", time:"21:00", opponent:"Wilco", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:15, date:"2027-01-29", time:"20:00", opponent:"Bierussia Dortmund", type:"Competitie", venue:"Bakwetering"},
-  {id:16, date:"2027-02-05", time:"20:00", opponent:"Jona", type:"Competitie", venue:"Walvis"},
-  {id:17, date:"2027-02-12", time:"19:00", opponent:"ACM", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:18, date:"2027-02-19", time:"20:00", opponent:"Atletic Bierbao", type:"Competitie", venue:"De Drie Maenen"},
-  {id:19, date:"2027-03-05", time:"21:00", opponent:"Viriditas", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:20, date:"2027-03-12", time:"19:00", opponent:"Boca Seniors", type:"Competitie", venue:"De Drie Maenen"},
-  {id:21, date:"2027-03-19", time:"22:00", opponent:"TechMudde Fc", type:"Competitie", venue:"De Drie Maenen"},
-  {id:22, date:"2027-04-02", time:"19:00", opponent:"ACM", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:23, date:"2027-04-09", time:"21:00", opponent:"Los Amigos", type:"Competitie", venue:"Bakwetering"},
-  {id:24, date:"2027-04-16", time:"21:00", opponent:"Wilco", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:25, date:"2027-04-23", time:"21:00", opponent:"VHL veteranen", type:"Competitie", venue:"De Drie Maenen"},
-  {id:26, date:"2027-05-14", time:"20:00", opponent:"V.W.A.B.", type:"Competitie", venue:"De Drie Maenen"},
-  {id:27, date:"2027-05-21", time:"20:00", opponent:"Barbier voetBal", type:"Competitie", venue:"De Drie Maenen"},
-  {id:28, date:"2027-06-04", time:"21:00", opponent:"Dion Blonk", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:29, date:"2027-06-18", time:"21:00", opponent:"ACM", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:30, date:"2027-07-02", time:"21:00", opponent:"Jona?", type:"Vriendschappelijk", venue:"Walvis"},
-  {id:31, date:"2027-07-16", time:"19:00", opponent:"ACM", type:"Vriendschappelijk", venue:"Walvis"}
+{id:1,date:"2026-09-04",time:"20:00",opponent:"Jona",type:"Competitie",venue:"Walvis"},
+{id:2,date:"2026-09-18",time:"21:00",opponent:"Tweede Jeugd",type:"Competitie",venue:"Bakwetering"},
+{id:3,date:"2026-09-25",time:"21:00",opponent:"Bierussia Dortmund",type:"Competitie",venue:"Bakwetering"},
+{id:4,date:"2026-10-09",time:"20:00",opponent:"Atletic Bierbao",type:"Competitie",venue:"Bakwetering"},
+{id:5,date:"2026-10-16",time:"20:00",opponent:"Boca Seniors",type:"Competitie",venue:"Bakwetering"},
+{id:6,date:"2026-10-30",time:"21:00",opponent:"Timo",type:"Vriendschappelijk",venue:"Walvis"},
+{id:7,date:"2026-11-06",time:"20:00",opponent:"TechMudde Fc",type:"Competitie",venue:"De Drie Maenen"},
+{id:8,date:"2026-11-20",time:"19:00",opponent:"Los Amigos",type:"Competitie",venue:"Bakwetering"},
+{id:9,date:"2026-11-27",time:"21:00",opponent:"Dion Blonk",type:"Vriendschappelijk",venue:"Walvis"},
+{id:10,date:"2026-12-04",time:"20:00",opponent:"VHL veteranen",type:"Competitie",venue:"De Drie Maenen"},
+{id:11,date:"2026-12-11",time:"19:00",opponent:"Barbier voetBal",type:"Competitie",venue:"Bakwetering"},
+{id:12,date:"2027-01-08",time:"19:00",opponent:"V.W.A.B.",type:"Competitie",venue:"De Drie Maenen"},
+{id:13,date:"2027-01-15",time:"20:00",opponent:"Tweede Jeugd",type:"Competitie",venue:"De Drie Maenen"},
+{id:14,date:"2027-01-22",time:"21:00",opponent:"Wilco",type:"Vriendschappelijk",venue:"Walvis"},
+{id:15,date:"2027-01-29",time:"20:00",opponent:"Bierussia Dortmund",type:"Competitie",venue:"Bakwetering"},
+{id:16,date:"2027-02-05",time:"20:00",opponent:"Jona",type:"Competitie",venue:"Walvis"},
+{id:17,date:"2027-02-12",time:"19:00",opponent:"ACM",type:"Vriendschappelijk",venue:"Walvis"},
+{id:18,date:"2027-02-19",time:"20:00",opponent:"Atletic Bierbao",type:"Competitie",venue:"De Drie Maenen"},
+{id:19,date:"2027-03-05",time:"21:00",opponent:"Viriditas",type:"Vriendschappelijk",venue:"Walvis"},
+{id:20,date:"2027-03-12",time:"19:00",opponent:"Boca Seniors",type:"Competitie",venue:"De Drie Maenen"},
+{id:21,date:"2027-03-19",time:"22:00",opponent:"TechMudde Fc",type:"Competitie",venue:"De Drie Maenen"},
+{id:22,date:"2027-04-02",time:"19:00",opponent:"ACM",type:"Vriendschappelijk",venue:"Walvis"},
+{id:23,date:"2027-04-09",time:"21:00",opponent:"Los Amigos",type:"Competitie",venue:"Bakwetering"},
+{id:24,date:"2027-04-16",time:"21:00",opponent:"Wilco",type:"Vriendschappelijk",venue:"Walvis"},
+{id:25,date:"2027-04-23",time:"21:00",opponent:"VHL veteranen",type:"Competitie",venue:"De Drie Maenen"},
+{id:26,date:"2027-05-14",time:"20:00",opponent:"V.W.A.B.",type:"Competitie",venue:"De Drie Maenen"},
+{id:27,date:"2027-05-21",time:"20:00",opponent:"Barbier voetBal",type:"Competitie",venue:"De Drie Maenen"},
+{id:28,date:"2027-06-04",time:"21:00",opponent:"Dion Blonk",type:"Vriendschappelijk",venue:"Walvis"},
+{id:29,date:"2027-06-18",time:"21:00",opponent:"ACM",type:"Vriendschappelijk",venue:"Walvis"},
+{id:30,date:"2027-07-02",time:"21:00",opponent:"Jona?",type:"Vriendschappelijk",venue:"Walvis"},
+{id:31,date:"2027-07-16",time:"19:00",opponent:"ACM",type:"Vriendschappelijk",venue:"Walvis"}
 ];
 
-/* =====================================================
-   DATA
-===================================================== */
+let players=JSON.parse(localStorage.getItem("cetus_players"))||["Speler 1","Speler 2","Speler 3","Speler 4","Speler 5"];
+let results=JSON.parse(localStorage.getItem("cetus_results"))||{};
+let settings=JSON.parse(localStorage.getItem("cetus_settings"))||{competition:true,friendly:true};
+let currentMatchId=null,currentFilter="all",statsScope="all";
 
-let players = JSON.parse(localStorage.getItem("cetus_players")) || [
-  "Speler 1",
-  "Speler 2",
-  "Speler 3",
-  "Speler 4",
-  "Speler 5"
-];
-
-let results = JSON.parse(localStorage.getItem("cetus_results")) || {};
-
-let currentMatchId = null;
-let currentFilter = "all";
-
-/* =====================================================
-   NAVIGATIE
-===================================================== */
-
-function showPage(pageId, button) {
-
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.remove("active");
-  });
-
+function saveSettings(){localStorage.setItem("cetus_settings",JSON.stringify(settings))}
+function isVisible(match){return match.type==="Competitie"?settings.competition:settings.friendly}
+function toggleCategory(category){
+  settings[category]=!settings[category];
+  if(!settings.competition&&!settings.friendly){settings[category]=true}
+  saveSettings();updateCategoryButtons();renderMatches();renderNextMatch();
+}
+function updateCategoryButtons(){
+  document.getElementById("toggleCompetition").classList.toggle("active",settings.competition);
+  document.getElementById("toggleFriendly").classList.toggle("active",settings.friendly);
+}
+function setStatsScope(scope){
+  statsScope=scope;
+  ["All","Competition","Friendly"].forEach(x=>{let b=document.getElementById("stats"+x+"Button");if(b)b.classList.toggle("active",scope===x.toLowerCase())});
+  renderStats();
+}
+function showPage(pageId,button){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(pageId).classList.add("active");
-
-  document.querySelectorAll(".nav-button").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  if (button) {
-    button.classList.add("active");
-  }
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-  renderAll();
+  document.querySelectorAll(".nav-button").forEach(b=>b.classList.remove("active"));
+  if(button)button.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});renderAll();
 }
-
-/* =====================================================
-   DATUM
-===================================================== */
-
-function formatDate(dateString) {
-
-  const date = new Date(dateString + "T12:00:00");
-
-  const days = [
-    "zo", "ma", "di", "wo", "do", "vr", "za"
-  ];
-
-  const months = [
-    "jan", "feb", "mrt", "apr", "mei", "jun",
-    "jul", "aug", "sep", "okt", "nov", "dec"
-  ];
-
-  return {
-    day: days[date.getDay()],
-    number: String(date.getDate()).padStart(2, "0"),
-    month: months[date.getMonth()],
-    year: date.getFullYear()
-  };
+function formatDate(s){
+  const d=new Date(s+"T12:00:00"),days=["zo","ma","di","wo","do","vr","za"],months=["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+  return {day:days[d.getDay()],number:String(d.getDate()).padStart(2,"0"),month:months[d.getMonth()],year:d.getFullYear()};
 }
-
-function formatLongDate(dateString) {
-
-  const date = new Date(dateString + "T12:00:00");
-
-  return date.toLocaleDateString("nl-NL", {
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
+function formatLongDate(s){return new Date(s+"T12:00:00").toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"})}
+function getUpcomingMatches(){
+  const today=new Date();today.setHours(0,0,0,0);
+  return matches.filter(m=>isVisible(m)&&new Date(m.date+"T12:00:00")>=today&&!results[m.id]).sort((a,b)=>a.date.localeCompare(b.date));
 }
-
-/* =====================================================
-   VOLGENDE WEDSTRIJD
-===================================================== */
-
-function getUpcomingMatches() {
-
-  const today = new Date();
-  today.setHours(0,0,0,0);
-
-  return matches
-    .filter(match => {
-      const date = new Date(match.date + "T12:00:00");
-      return date >= today && !results[match.id];
-    })
-    .sort((a,b) => a.date.localeCompare(b.date));
+function renderNextMatch(){
+  const c=document.getElementById("nextMatchContainer"),up=getUpcomingMatches();
+  if(!up.length){c.innerHTML='<div class="card empty">Geen aankomende wedstrijden binnen je huidige selectie.</div>';return}
+  const m=up[0];
+  c.innerHTML=`<div class="next-match">
+    <div class="next-match-header"><div class="next-match-title">Volgende wedstrijd</div><span class="badge ${m.type!=="Competitie"?"friendly":""}">${m.type}</span></div>
+    <div class="match-teams"><div class="team-side"><img src="cetus-logo.png" alt="Cetus">CETUS</div><div class="vs">VS</div><div class="team-side"><div class="opponent-icon">⚽</div>${escapeHtml(m.opponent)}</div></div>
+    <div class="match-info"><span>◷ ${formatLongDate(m.date)} · ${m.time}</span><span>⌖ ${escapeHtml(m.venue)}</span></div>
+    <button class="primary-button" onclick="openResultModal(${m.id})">Wedstrijd bekijken</button>
+  </div>`;
 }
-
-function renderNextMatch() {
-
-  const container = document.getElementById("nextMatchContainer");
-  const upcoming = getUpcomingMatches();
-
-  if (!upcoming.length) {
-    container.innerHTML = `
-      <div class="card empty">
-        Geen aankomende wedstrijden.
-      </div>
-    `;
-    return;
-  }
-
-  const match = upcoming[0];
-
-  container.innerHTML = `
-    <div class="next-match">
-
-      <div class="next-match-header">
-        <div class="next-match-title">Volgende wedstrijd</div>
-        <span class="badge ${match.type !== "Competitie" ? "friendly" : ""}">
-          ${match.type}
-        </span>
-      </div>
-
-      <div class="match-teams">
-
-        <div class="team-side">
-          <img src="cetus-logo.png" alt="Cetus">
-          CETUS
-        </div>
-
-        <div class="vs">VS</div>
-
-        <div class="team-side opponent">
-          <div class="opponent-icon">⚽</div>
-          ${match.opponent}
-        </div>
-
-      </div>
-
-      <div class="match-info">
-        <span>◷ ${formatLongDate(match.date)} · ${match.time}</span>
-        <span>⌖ ${match.venue}</span>
-      </div>
-
-      <button class="primary-button" onclick="openResultModal(${match.id})">
-        Wedstrijd bekijken
-      </button>
-
-    </div>
-  `;
+function setMatchFilter(filter,button){
+  currentFilter=filter;document.querySelectorAll(".filter-button").forEach(b=>b.classList.remove("active"));button.classList.add("active");renderMatches();
 }
-
-/* =====================================================
-   WEDSTRIJDEN
-===================================================== */
-
-function setMatchFilter(filter, button) {
-
-  currentFilter = filter;
-
-  document.querySelectorAll(".filter-button").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  button.classList.add("active");
-
-  renderMatches();
-}
-
-function renderMatches() {
-
-  const container = document.getElementById("matchesContainer");
-
-  let filtered = [...matches];
-
-  const today = new Date();
-  today.setHours(0,0,0,0);
-
-  if (currentFilter === "upcoming") {
-    filtered = filtered.filter(match => {
-      const date = new Date(match.date + "T12:00:00");
-      return date >= today && !results[match.id];
-    });
-  }
-
-  if (currentFilter === "played") {
-    filtered = filtered.filter(match => results[match.id]);
-  }
-
-  const grouped = {};
-
-  filtered.forEach(match => {
-
-    const date = new Date(match.date + "T12:00:00");
-
-    const key = `${date.getFullYear()}-${date.getMonth()}`;
-
-    if (!grouped[key]) {
-      grouped[key] = {
-        title: date.toLocaleDateString("nl-NL", {
-          month: "long",
-          year: "numeric"
-        }),
-        matches: []
-      };
-    }
-
-    grouped[key].matches.push(match);
-  });
-
-  if (!Object.keys(grouped).length) {
-    container.innerHTML = `
-      <div class="card empty">
-        Geen wedstrijden gevonden.
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = "";
-
-  Object.values(grouped).forEach(group => {
-
-    const title = document.createElement("div");
-    title.className = "month-title";
-    title.textContent =
-      group.title.charAt(0).toUpperCase() + group.title.slice(1);
-
-    container.appendChild(title);
-
-    group.matches.forEach(match => {
-
-      const date = formatDate(match.date);
-      const result = results[match.id];
-
-      let resultText = "";
-      let resultClass = "";
-
-      if (result) {
-
-        resultText = `${result.cetus} - ${result.opponent}`;
-
-        if (result.cetus > result.opponent) {
-          resultClass = "win";
-        } else if (result.cetus < result.opponent) {
-          resultClass = "loss";
-        } else {
-          resultClass = "draw";
-        }
-
-      }
-
-      const card = document.createElement("div");
-      card.className = "match-card";
-
-      card.onclick = () => openResultModal(match.id);
-
-      card.innerHTML = `
-
-        <div class="date-box">
-          <div class="date-day">${date.day}</div>
-          <div class="date-number">${date.number} ${date.month}</div>
-          <div class="date-time">${match.time}</div>
-        </div>
-
-        <div class="match-main">
-
-          <div class="opponent-name">
-            ${match.opponent}
-          </div>
-
-          <div class="venue">
-            ⌖ ${match.venue}
-          </div>
-
-          <div style="margin-top:6px;">
-            <span class="badge ${match.type !== "Competitie" ? "friendly" : ""}">
-              ${match.type}
-            </span>
-          </div>
-
-        </div>
-
-        <div class="match-right">
-
-          ${result
-            ? `<div class="result ${resultClass}">${resultText}</div>`
-            : `<div class="chevron">›</div>`
-          }
-
-        </div>
-      `;
-
-      container.appendChild(card);
+function renderMatches(){
+  const c=document.getElementById("matchesContainer");let filtered=matches.filter(isVisible),today=new Date();today.setHours(0,0,0,0);
+  if(currentFilter==="upcoming")filtered=filtered.filter(m=>new Date(m.date+"T12:00:00")>=today&&!results[m.id]);
+  if(currentFilter==="played")filtered=filtered.filter(m=>results[m.id]);
+  const grouped={};
+  filtered.forEach(m=>{let d=new Date(m.date+"T12:00:00"),key=`${d.getFullYear()}-${d.getMonth()}`;if(!grouped[key])grouped[key]={title:d.toLocaleDateString("nl-NL",{month:"long",year:"numeric"}),matches:[]};grouped[key].matches.push(m)});
+  if(!Object.keys(grouped).length){c.innerHTML='<div class="card empty">Geen wedstrijden gevonden met deze filters.</div>';return}
+  c.innerHTML="";
+  Object.values(grouped).forEach(g=>{
+    let t=document.createElement("div");t.className="month-title";t.textContent=g.title.charAt(0).toUpperCase()+g.title.slice(1);c.appendChild(t);
+    g.matches.forEach(m=>{
+      let d=formatDate(m.date),r=results[m.id],rc="";
+      if(r)rc=r.cetus>r.opponent?"win":r.cetus<r.opponent?"loss":"draw";
+      let card=document.createElement("div");card.className="match-card";card.onclick=()=>openResultModal(m.id);
+      card.innerHTML=`<div class="date-box"><div class="date-day">${d.day}</div><div class="date-number">${d.number} ${d.month}</div><div class="date-time">${m.time}</div></div>
+      <div class="match-main"><div class="opponent-name">${escapeHtml(m.opponent)}</div><div class="venue">⌖ ${escapeHtml(m.venue)}</div><div style="margin-top:6px"><span class="badge ${m.type!=="Competitie"?"friendly":""}">${m.type}</span></div></div>
+      <div class="match-right">${r?`<div class="result ${rc}">${r.cetus} - ${r.opponent}</div>`:'<div class="chevron">›</div>'}</div>`;
+      c.appendChild(card);
     });
   });
 }
-
-/* =====================================================
-   RESULTAAT MODAL
-===================================================== */
-
-function openResultModal(matchId) {
-
-  currentMatchId = matchId;
-
-  const match = matches.find(m => m.id === matchId);
-
-  if (!match) return;
-
-  const result = results[matchId];
-
-  document.getElementById("modalTitle").textContent =
-    result ? "Uitslag aanpassen" : "Uitslag invoeren";
-
-  document.getElementById("modalOpponent").textContent =
-    match.opponent;
-
-  document.getElementById("cetusScore").value =
-    result ? result.cetus : 0;
-
-  document.getElementById("opponentScore").value =
-    result ? result.opponent : 0;
-
-  renderScorerInputs(
-    result ? result.scorers || [] : [],
-    result ? result.cetus : 0
-  );
-
+function openResultModal(id){
+  currentMatchId=id;let m=matches.find(x=>x.id===id),r=results[id];if(!m)return;
+  document.getElementById("modalTitle").textContent=r?"Uitslag aanpassen":"Uitslag invoeren";
+  document.getElementById("modalOpponent").textContent=m.opponent;
+  document.getElementById("cetusScore").value=r?r.cetus:0;
+  document.getElementById("opponentScore").value=r?r.opponent:0;
+  renderScorerInputs(r?r.scorers||[]:[],r?r.cetus:0);
   document.getElementById("resultModal").classList.add("show");
 }
-
-function closeModal() {
-
-  document.getElementById("resultModal").classList.remove("show");
-
-  currentMatchId = null;
-}
-
-function renderScorerInputs(existingScorers, goalCount) {
-
-  const container = document.getElementById("scorersInputs");
-
-  container.innerHTML = "";
-
-  if (goalCount <= 0) {
-
-    container.innerHTML = `
-      <div class="empty" style="padding:10px 0;">
-        Geen doelpunten voor Cetus.
-      </div>
-    `;
-
-    return;
-  }
-
-  for (let i = 0; i < goalCount; i++) {
-
-    const select = document.createElement("select");
-
-    select.className = "scorer-input";
-
-    let options = `
-      <option value="">Doelpuntenmaker ${i + 1}</option>
-    `;
-
-    players.forEach(player => {
-
-      const selected =
-        existingScorers[i] === player
-          ? "selected"
-          : "";
-
-      options += `
-        <option value="${escapeHtml(player)}" ${selected}>
-          ${escapeHtml(player)}
-        </option>
-      `;
-    });
-
-    select.innerHTML = options;
-
-    container.appendChild(select);
+function closeModal(){document.getElementById("resultModal").classList.remove("show");currentMatchId=null}
+function renderScorerInputs(existing,count){
+  const c=document.getElementById("scorersInputs");c.innerHTML="";
+  if(count<=0){c.innerHTML='<div class="empty" style="padding:10px 0">Geen doelpunten voor Cetus.</div>';return}
+  for(let i=0;i<count;i++){
+    let s=document.createElement("select");s.className="scorer-input";
+    let opts='<option value="">Doelpuntenmaker '+(i+1)+'</option>';
+    players.forEach(p=>opts+=`<option value="${escapeHtml(p)}" ${existing[i]===p?"selected":""}>${escapeHtml(p)}</option>`);
+    s.innerHTML=opts;c.appendChild(s);
   }
 }
-
-/* =====================================================
-   SCORE INPUT
-===================================================== */
-
-document.getElementById("cetusScore").addEventListener("input", function() {
-
-  let goals = parseInt(this.value) || 0;
-
-  if (goals < 0) goals = 0;
-
-  this.value = goals;
-
-  const currentScorers =
-    Array.from(document.querySelectorAll(".scorer-input"))
-      .map(select => select.value);
-
-  renderScorerInputs(currentScorers, goals);
+document.getElementById("cetusScore").addEventListener("input",function(){
+  let goals=Math.max(0,parseInt(this.value)||0),old=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value);this.value=goals;renderScorerInputs(old,goals);
 });
-
-/* =====================================================
-   RESULTAAT OPSLAAN
-===================================================== */
-
-function saveResult() {
-
-  if (!currentMatchId) return;
-
-  const cetusScore =
-    Math.max(0, parseInt(document.getElementById("cetusScore").value) || 0);
-
-  const opponentScore =
-    Math.max(0, parseInt(document.getElementById("opponentScore").value) || 0);
-
-  const scorers =
-    Array.from(document.querySelectorAll(".scorer-input"))
-      .map(select => select.value)
-      .filter(value => value !== "");
-
-  results[currentMatchId] = {
-    cetus: cetusScore,
-    opponent: opponentScore,
-    scorers: scorers
-  };
-
-  localStorage.setItem(
-    "cetus_results",
-    JSON.stringify(results)
-  );
-
-  closeModal();
-
-  renderAll();
+function saveResult(){
+  if(!currentMatchId)return;
+  let cetus=Math.max(0,parseInt(document.getElementById("cetusScore").value)||0),opp=Math.max(0,parseInt(document.getElementById("opponentScore").value)||0);
+  let scorers=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value).filter(Boolean);
+  if(scorers.length!==cetus){alert(`Selecteer voor elk Cetus-doelpunt een doelpuntenmaker. ${cetus} doelpunten = ${cetus} doelpuntenmakers.`);return}
+  results[currentMatchId]={cetus:cetus,opponent:opp,scorers:scorers};
+  localStorage.setItem("cetus_results",JSON.stringify(results));closeModal();renderAll();
 }
-
-/* =====================================================
-   LAATSTE WEDSTRIJD
-===================================================== */
-
-function renderLastMatch() {
-
-  const container = document.getElementById("lastMatchContainer");
-
-  const played = matches
-    .filter(match => results[match.id])
-    .sort((a,b) => b.date.localeCompare(a.date));
-
-  if (!played.length) {
-
-    container.innerHTML = `
-      Nog geen wedstrijden gespeeld.
-      <div style="margin-top:14px;">
-        <button class="secondary-button"
-          style="width:100%;"
-          onclick="showPage('matches', document.querySelectorAll('.nav-button')[1])">
-          Uitslag invoeren
-        </button>
-      </div>
-    `;
-
-    return;
-  }
-
-  const match = played[0];
-  const result = results[match.id];
-
-  let outcome = "draw";
-
-  if (result.cetus > result.opponent) outcome = "win";
-  if (result.cetus < result.opponent) outcome = "loss";
-
-  let label = "Gelijkspel";
-
-  if (outcome === "win") label = "Gewonnen";
-  if (outcome === "loss") label = "Verloren";
-
-  container.innerHTML = `
-
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-
-      <div>
-        <div style="font-weight:800;font-size:18px;">
-          Cetus - ${match.opponent}
-        </div>
-
-        <div style="color:var(--muted);font-size:13px;margin-top:5px;">
-          ${formatLongDate(match.date)}
-        </div>
-      </div>
-
-      <div class="result ${outcome}" style="font-size:23px;">
-        ${result.cetus} - ${result.opponent}
-      </div>
-
-    </div>
-
-    <div style="margin-top:12px;color:var(--muted);font-size:13px;">
-      ${label}
-    </div>
-
-    <button class="secondary-button"
-      style="width:100%;margin-top:14px;"
-      onclick="openResultModal(${match.id})">
-      Uitslag aanpassen
-    </button>
-  `;
+function renderLastMatch(){
+  const c=document.getElementById("lastMatchContainer"),played=matches.filter(m=>results[m.id]).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!played.length){c.innerHTML='Nog geen wedstrijden gespeeld.<div style="margin-top:14px"><button class="secondary-button" style="width:100%" onclick="showPage(\'matches\',document.querySelectorAll(\'.nav-button\')[1])">Uitslag invoeren</button></div>';return}
+  let m=played[0],r=results[m.id],out=r.cetus>r.opponent?"win":r.cetus<r.opponent?"loss":"draw",label=out==="win"?"Gewonnen":out==="loss"?"Verloren":"Gelijkspel";
+  c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-weight:800;font-size:18px">Cetus - ${escapeHtml(m.opponent)}</div><div style="color:var(--muted);font-size:13px;margin-top:5px">${formatLongDate(m.date)} · ${m.type}</div></div><div class="result ${out}" style="font-size:23px">${r.cetus} - ${r.opponent}</div></div><div style="margin-top:12px;color:var(--muted);font-size:13px">${label}</div><button class="secondary-button" style="width:100%;margin-top:14px" onclick="openResultModal(${m.id})">Uitslag aanpassen</button>`;
 }
-
-/* =====================================================
-   STAND
-===================================================== */
-
-function calculateStandings() {
-
-  const teams = {};
-
-  function createTeam(name) {
-
-    if (!teams[name]) {
-
-      teams[name] = {
-        name: name,
-        played: 0,
-        wins: 0,
-        draws: 0,
-        losses: 0,
-        goalsFor: 0,
-        goalsAgainst: 0,
-        points: 0
-      };
-    }
-  }
-
-  matches
-    .filter(match => match.type === "Competitie")
-    .forEach(match => {
-
-      createTeam("Cetus");
-      createTeam(match.opponent);
-
-      const result = results[match.id];
-
-      if (!result) return;
-
-      const cetus = teams["Cetus"];
-      const opponent = teams[match.opponent];
-
-      cetus.played++;
-      opponent.played++;
-
-      cetus.goalsFor += result.cetus;
-      cetus.goalsAgainst += result.opponent;
-
-      opponent.goalsFor += result.opponent;
-      opponent.goalsAgainst += result.cetus;
-
-      if (result.cetus > result.opponent) {
-
-        cetus.wins++;
-        cetus.points += 3;
-        opponent.losses++;
-
-      } else if (result.cetus < result.opponent) {
-
-        opponent.wins++;
-        opponent.points += 3;
-        cetus.losses++;
-
-      } else {
-
-        cetus.draws++;
-        opponent.draws++;
-
-        cetus.points++;
-        opponent.points++;
-      }
-    });
-
-  return Object.values(teams).sort((a,b) => {
-
-    if (b.points !== a.points)
-      return b.points - a.points;
-
-    const bDiff = b.goalsFor - b.goalsAgainst;
-    const aDiff = a.goalsFor - a.goalsAgainst;
-
-    if (bDiff !== aDiff)
-      return bDiff - aDiff;
-
-    return b.goalsFor - a.goalsFor;
+function calculateStandings(){
+  const teams={};const create=n=>{if(!teams[n])teams[n]={name:n,played:0,wins:0,draws:0,losses:0,goalsFor:0,goalsAgainst:0,points:0}};
+  matches.filter(m=>m.type==="Competitie").forEach(m=>{create("Cetus");create(m.opponent);let r=results[m.id];if(!r)return;let a=teams.Cetus,b=teams[m.opponent];a.played++;b.played++;a.goalsFor+=r.cetus;a.goalsAgainst+=r.opponent;b.goalsFor+=r.opponent;b.goalsAgainst+=r.cetus;
+    if(r.cetus>r.opponent){a.wins++;a.points+=3;b.losses++}else if(r.cetus<r.opponent){b.wins++;b.points+=3;a.losses++}else{a.draws++;b.draws++;a.points++;b.points++}
   });
+  return Object.values(teams).sort((a,b)=>b.points-a.points||((b.goalsFor-b.goalsAgainst)-(a.goalsFor-a.goalsAgainst))||b.goalsFor-a.goalsFor);
 }
-
-function renderStandings() {
-
-  const body = document.getElementById("standingsBody");
-
-  const standings = calculateStandings();
-
-  body.innerHTML = "";
-
-  standings.forEach((team, index) => {
-
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td class="position">${index + 1}</td>
-
-      <td class="${team.name === "Cetus" ? "our-team" : ""}">
-        ${escapeHtml(team.name)}
-      </td>
-
-      <td>${team.played}</td>
-      <td>${team.wins}</td>
-      <td>${team.draws}</td>
-      <td>${team.losses}</td>
-      <td>${team.goalsFor}</td>
-      <td>${team.goalsAgainst}</td>
-      <td><strong>${team.points}</strong></td>
-    `;
-
-    body.appendChild(row);
-  });
-
-  const cetusPosition =
-    standings.findIndex(team => team.name === "Cetus") + 1;
-
-  document.getElementById("homePosition").textContent =
-    cetusPosition > 0 ? cetusPosition : "-";
-
-  const cetus = standings.find(team => team.name === "Cetus");
-
-  if (cetus) {
-
-    document.getElementById("homeGames").textContent =
-      cetus.played;
-
-    document.getElementById("homePoints").textContent =
-      cetus.points;
-  }
+function renderStandings(){
+  const body=document.getElementById("standingsBody"),s=calculateStandings();body.innerHTML="";
+  s.forEach((t,i)=>{let row=document.createElement("tr");row.innerHTML=`<td class="position">${i+1}</td><td class="${t.name==="Cetus"?"our-team":""}">${escapeHtml(t.name)}</td><td>${t.played}</td><td>${t.wins}</td><td>${t.draws}</td><td>${t.losses}</td><td>${t.goalsFor}</td><td>${t.goalsAgainst}</td><td><strong>${t.points}</strong></td>`;body.appendChild(row)});
+  let cetus=s.find(t=>t.name==="Cetus");
+  document.getElementById("homePosition").textContent=cetus&&cetus.played>0?(s.findIndex(t=>t.name==="Cetus")+1):"-";
+  document.getElementById("homeGames").textContent=cetus?cetus.played:0;
+  document.getElementById("homePoints").textContent=cetus?cetus.points:0;
 }
-
-/* =====================================================
-   STATISTIEKEN
-===================================================== */
-
-function renderStats() {
-
-  const played = matches.filter(match => results[match.id]);
-
-  let goals = 0;
-  let wins = 0;
-  let draws = 0;
-  let losses = 0;
-
-  played.forEach(match => {
-
-    const result = results[match.id];
-
-    goals += result.cetus;
-
-    if (result.cetus > result.opponent) wins++;
-    else if (result.cetus < result.opponent) losses++;
-    else draws++;
-  });
-
-  const percentage =
-    played.length
-      ? Math.round((wins / played.length) * 100)
-      : 0;
-
-  document.getElementById("statGames").textContent =
-    played.length;
-
-  document.getElementById("statGoals").textContent =
-    goals;
-
-  document.getElementById("statWins").textContent =
-    wins;
-
-  document.getElementById("statDraws").textContent =
-    draws;
-
-  document.getElementById("statLosses").textContent =
-    losses;
-
-  document.getElementById("statWinPercentage").textContent =
-    percentage + "%";
-
-  renderScorers();
+function renderStats(){
+  let played=matches.filter(m=>results[m.id]&&(statsScope==="all"||(statsScope==="competition"&&m.type==="Competitie")||(statsScope==="friendly"&&m.type==="Vriendschappelijk")));
+  let goals=0,wins=0,draws=0,losses=0;
+  played.forEach(m=>{let r=results[m.id];goals+=r.cetus;if(r.cetus>r.opponent)wins++;else if(r.cetus<r.opponent)losses++;else draws++});
+  document.getElementById("statGames").textContent=played.length;document.getElementById("statGoals").textContent=goals;document.getElementById("statWins").textContent=wins;document.getElementById("statDraws").textContent=draws;document.getElementById("statLosses").textContent=losses;document.getElementById("statWinPercentage").textContent=(played.length?Math.round(wins/played.length*100):0)+"%";
+  renderScorers(played);
 }
-
-function renderScorers() {
-
-  const container =
-    document.getElementById("scorersContainer");
-
-  const scorerCounts = {};
-
-  Object.values(results).forEach(result => {
-
-    (result.scorers || []).forEach(player => {
-
-      if (!player) return;
-
-      scorerCounts[player] =
-        (scorerCounts[player] || 0) + 1;
-    });
-  });
-
-  const sorted = Object.entries(scorerCounts)
-    .sort((a,b) => b[1] - a[1]);
-
-  if (!sorted.length) {
-
-    container.innerHTML = `
-      <div class="empty">
-        Nog geen doelpuntenmakers geregistreerd.
-      </div>
-    `;
-
-    return;
-  }
-
-  container.innerHTML = "";
-
-  sorted.forEach((item, index) => {
-
-    const row = document.createElement("div");
-
-    row.className = "scorer-row";
-
-    row.innerHTML = `
-      <div class="scorer-position">${index + 1}</div>
-      <div class="scorer-name">${escapeHtml(item[0])}</div>
-      <div class="scorer-goals">
-        ${item[1]} ${item[1] === 1 ? "goal" : "goals"}
-      </div>
-    `;
-
-    container.appendChild(row);
-  });
+function renderScorers(scopeMatches){
+  const c=document.getElementById("scorersContainer"),counts={};
+  scopeMatches.forEach(m=>(results[m.id].scorers||[]).forEach(p=>{counts[p]=(counts[p]||0)+1}));
+  let sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  if(!sorted.length){c.innerHTML='<div class="empty">Nog geen doelpuntenmakers geregistreerd.</div>';return}
+  c.innerHTML="";sorted.forEach((x,i)=>{let r=document.createElement("div");r.className="scorer-row";r.innerHTML=`<div class="scorer-position">${i+1}</div><div class="scorer-name">${escapeHtml(x[0])}</div><div class="scorer-goals">${x[1]} ${x[1]===1?"goal":"goals"}</div>`;c.appendChild(r)});
 }
-
-/* =====================================================
-   TEAM
-===================================================== */
-
-function renderPlayers() {
-
-  const container =
-    document.getElementById("playersContainer");
-
-  if (!players.length) {
-
-    container.innerHTML = `
-      <div class="empty">
-        Nog geen spelers toegevoegd.
-      </div>
-    `;
-
-    return;
-  }
-
-  container.innerHTML = "";
-
-  players.forEach((player, index) => {
-
-    const row = document.createElement("div");
-
-    row.className = "player-row";
-
-    row.innerHTML = `
-      <div class="player-name">
-        ${escapeHtml(player)}
-      </div>
-
-      <button
-        class="delete-player"
-        onclick="deletePlayer(${index})">
-        Verwijderen
-      </button>
-    `;
-
-    container.appendChild(row);
-  });
+function renderPlayers(){
+  const c=document.getElementById("playersContainer");if(!players.length){c.innerHTML='<div class="empty">Nog geen spelers toegevoegd.</div>';return}
+  c.innerHTML="";players.forEach((p,i)=>{let r=document.createElement("div");r.className="player-row";r.innerHTML=`<div class="player-name">${escapeHtml(p)}</div><button class="delete-player" onclick="deletePlayer(${i})">Verwijderen</button>`;c.appendChild(r)});
 }
-
-function addPlayer() {
-
-  const input =
-    document.getElementById("newPlayerInput");
-
-  const name = input.value.trim();
-
-  if (!name) return;
-
-  players.push(name);
-
-  localStorage.setItem(
-    "cetus_players",
-    JSON.stringify(players)
-  );
-
-  input.value = "";
-
-  renderPlayers();
-}
-
-function deletePlayer(index) {
-
-  if (!confirm("Deze speler verwijderen?")) return;
-
-  players.splice(index, 1);
-
-  localStorage.setItem(
-    "cetus_players",
-    JSON.stringify(players)
-  );
-
-  renderPlayers();
-}
-
-/* =====================================================
-   VEILIG TEKST WEERGEVEN
-===================================================== */
-
-function escapeHtml(text) {
-
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-/* =====================================================
-   ALLES OPNIEUW TEKENEN
-===================================================== */
-
-function renderAll() {
-
-  renderNextMatch();
-  renderMatches();
-  renderStandings();
-  renderStats();
-  renderPlayers();
-  renderLastMatch();
-}
-
-/* =====================================================
-   START
-===================================================== */
-
+function addPlayer(){let i=document.getElementById("newPlayerInput"),n=i.value.trim();if(!n)return;players.push(n);localStorage.setItem("cetus_players",JSON.stringify(players));i.value="";renderPlayers()}
+function deletePlayer(i){if(!confirm("Deze speler verwijderen?"))return;players.splice(i,1);localStorage.setItem("cetus_players",JSON.stringify(players));renderPlayers()}
+function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function renderAll(){updateCategoryButtons();renderNextMatch();renderMatches();renderStandings();renderStats();renderPlayers();renderLastMatch()}
 renderAll();
-
-/* Klik buiten modal om hem te sluiten */
-document.getElementById("resultModal").addEventListener("click", function(event) {
-
-  if (event.target === this) {
-    closeModal();
-  }
-
-});
-
+document.getElementById("resultModal").addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal()});
 </script>
-
 </body>
 </html>
