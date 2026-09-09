@@ -16,7 +16,12 @@
 html{background:var(--bg)}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
 button,input,select{font:inherit} button{cursor:pointer}
-.app{max-width:760px;min-height:100vh;margin:0 auto;background:var(--bg)}
+.app{max-width:760px;min-height:100vh;margin:0 auto;background:var(--bg);position:relative}
+.refresh-button{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;width:42px;height:42px;border:1px solid var(--border);border-radius:50%;background:rgba(255,255,255,.96);color:var(--red);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(25,25,25,.10);z-index:30;padding:0}
+.refresh-button svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.refresh-button:active{transform:scale(.94)}
+.refresh-button.loading svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .top-header{background:#fff;padding:20px;border-bottom:1px solid var(--border)}
 .brand{display:flex;align-items:center;gap:13px}
@@ -128,6 +133,8 @@ main{padding-bottom:110px}\n</style>
 <div class="app">
 
 
+
+<button id="refreshButton" class="refresh-button" type="button" aria-label="Gegevens vernieuwen" title="Gegevens vernieuwen" onclick="refreshData()"><svg viewBox="0 0 24 24"><path d="M20 11a8.1 8.1 0 0 0-14.8-4L3 10"/><path d="M3 5v5h5"/><path d="M4 13a8.1 8.1 0 0 0 14.8 4L21 14"/><path d="M21 19v-5h-5"/></svg></button>
 
 <main class="content">
 
@@ -476,6 +483,20 @@ async function init(){
   }
 }
 function renderAll(){updateCategoryButtons();renderNextMatch();renderMatches();renderStats();renderPlayers();renderLastMatch()}
+async function refreshData(){
+  const b=document.getElementById("refreshButton");
+  if(b.classList.contains("loading"))return;
+  b.classList.add("loading"); b.disabled=true;
+  try{
+    await loadData();
+    renderAll();
+  }catch(error){
+    console.error(error);
+    alert("De gegevens konden niet worden vernieuwd. Controleer je internetverbinding.");
+  }finally{
+    b.classList.remove("loading"); b.disabled=false;
+  }
+}
 
 document.getElementById("resultModal").addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal()});
 init();
