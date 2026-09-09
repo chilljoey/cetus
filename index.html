@@ -25,7 +25,7 @@ button,input,select{font:inherit} button{cursor:pointer}
 .brand-text p{margin:4px 0 0;color:var(--muted);font-size:11px;letter-spacing:2px}
 .season{margin-top:15px;color:var(--muted);font-size:13px}
 
-.content{padding:18px 16px 100px}
+.content{padding:18px 16px 128px}
 .page{display:none}.page.active{display:block}
 .page-title{margin:6px 4px 18px}.page-title h2{margin:0;font-size:27px}
 .page-title p{margin:5px 0 0;color:var(--muted);font-size:14px}
@@ -52,16 +52,8 @@ button,input,select{font:inherit} button{cursor:pointer}
 .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
 .stat-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;box-shadow:0 4px 18px rgba(25,25,25,.06)}
 
-.stat-icon{
-  width:34px;height:34px;margin:0 auto 7px;border-radius:10px;
-  background:var(--red-light);color:var(--red);display:flex;
-  align-items:center;justify-content:center;font-size:16px;font-weight:800;
-}
-.icon-ball::before{content:"";width:13px;height:13px;border:2px solid currentColor;border-radius:50%}
-.icon-win::before{content:"";width:14px;height:10px;border:2px solid currentColor;border-radius:2px 2px 6px 6px}
-.icon-goals::before{content:"";width:15px;height:15px;border:2px solid currentColor;border-radius:50%}
-.icon-goals::after{content:"";position:absolute;width:5px;height:5px;background:currentColor;border-radius:50%}
-.stat-icon{position:relative}
+.stat-icon{width:34px;height:34px;margin:0 auto 7px;border-radius:10px;background:var(--red-light);color:var(--red);display:flex;align-items:center;justify-content:center}
+.stat-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .stat-number{font-size:24px;font-weight:800;margin-top:7px}
 .stat-label{margin-top:4px;color:var(--muted);font-size:11px}
 
@@ -81,8 +73,8 @@ button,input,select{font:inherit} button{cursor:pointer}
 .category-toggle.active .dot{background:var(--red)}
 
 .month-title{margin:20px 5px 9px;font-size:17px}
-.match-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:12px;display:grid;grid-template-columns:68px 1fr auto;gap:12px;align-items:center;margin-bottom:9px;box-shadow:0 4px 18px rgba(25,25,25,.06);cursor:pointer}
-.date-box{background:#f5f5f4;border-radius:11px;padding:9px 5px;text-align:center}
+.match-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:13px;display:grid;grid-template-columns:68px 1fr auto;gap:12px;align-items:center;margin-bottom:10px;box-shadow:0 4px 18px rgba(25,25,25,.06);cursor:pointer}
+.date-box{background:#f5f5f4;border-radius:13px;padding:10px 5px;text-align:center}
 .date-day{font-size:11px;color:var(--muted)}.date-number{font-weight:800;font-size:17px;margin:2px 0}.date-time{font-size:11px;color:var(--muted)}
 .match-main{min-width:0}.opponent-name{font-weight:700;font-size:15px;margin-bottom:5px}.venue{color:var(--muted);font-size:12px}
 .match-right{text-align:right}.result{font-size:19px;font-weight:800;margin-bottom:7px}.result.win{color:var(--green)}.result.loss{color:var(--red)}.result.draw{color:var(--blue)}
@@ -110,7 +102,9 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 5px max(8px,env(safe-area-inset-bottom));z-index:20}
 .nav-button{border:0;background:transparent;color:#7c8288;padding:5px 2px;font-size:10px;font-weight:600}
-.nav-icon{display:block;font-size:19px;margin-bottom:3px}.nav-button.active{color:var(--red)}
+.nav-icon{display:flex;height:22px;align-items:center;justify-content:center;margin-bottom:4px;color:currentColor}
+.nav-icon svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nav-button.active{color:var(--red)}
 
 .modal{display:none;position:fixed;inset:0;background:rgba(25,25,25,.45);z-index:50;padding:20px;align-items:flex-end;justify-content:center}
 .modal.show{display:flex}.modal-box{width:min(600px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:21px}
@@ -144,9 +138,9 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
   <div id="nextMatchContainer"></div>
 
   <div class="stat-grid">
-    <div class="stat-card"><div class="stat-icon icon-ball"></div><div class="stat-number" id="homeGames">0</div><div class="stat-label">wedstrijden</div></div>
-    <div class="stat-card"><div class="stat-icon icon-win"></div><div class="stat-number" id="homeWins">0</div><div class="stat-label">gewonnen</div></div>
-    <div class="stat-card"><div class="stat-icon icon-goals"></div><div class="stat-number" id="homeGoalDiff">0 - 0</div><div class="stat-label">doelsaldo</div></div>
+    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7 2 2.5-1 3.2h-3L9 9.5z"/><path d="m12 12.7 2.5 1.8M10 12.7l-2.5 1.8M10 9.5l-1.5-2M14 9.5l1.5-2"/></svg></div><div class="stat-number" id="homeGames">0</div><div class="stat-label">wedstrijden</div></div>
+    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M7 5h10v3c0 3-2 5-5 5s-5-2-5-5z"/><path d="M7 7H4v1c0 2.5 1.5 4 4 4M17 7h3v1c0 2.5-1.5 4-4 4"/><path d="M12 13v4M8 21h8M9 17h6"/></svg></div><div class="stat-number" id="homeWins">0</div><div class="stat-label">gewonnen</div></div>
+    <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 10h16M4 14h16M8 6v12M12 6v12M16 6v12"/></svg></div><div class="stat-number" id="homeGoalDiff">0 - 0</div><div class="stat-label">doelsaldo</div></div>
   </div>
 
   <div class="card">
@@ -212,10 +206,10 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 </div>
 
 <nav class="bottom-nav">
-  <button class="nav-button active" onclick="showPage('home',this)"><span class="nav-icon">⌂</span>Home</button>
-  <button class="nav-button" onclick="showPage('matches',this)"><span class="nav-icon">▣</span>Wedstrijden</button>
-  <button class="nav-button" onclick="showPage('stats',this)"><span class="nav-icon">▥</span>Statistieken</button>
-  <button class="nav-button" onclick="showPage('team',this)"><span class="nav-icon">♟</span>Team</button>
+  <button class="nav-button active" onclick="showPage('home',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/><path d="M9.5 21v-6h5v6"/></svg></span>Home</button>
+  <button class="nav-button" onclick="showPage('matches',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>Wedstrijden</button>
+  <button class="nav-button" onclick="showPage('stats',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V5M16 20v-8M22 20H2"/></svg></span>Statistieken</button>
+  <button class="nav-button" onclick="showPage('team',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3.5 20c.6-3.4 2.5-5 5.5-5s4.9 1.6 5.5 5"/><path d="M14.5 15.5c2.8-.5 5 .9 5.8 3.5"/></svg></span>Team</button>
 </nav>
 
 <div id="resultModal" class="modal">
