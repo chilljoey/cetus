@@ -240,48 +240,16 @@ main{padding-bottom:110px}\n</style>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const matches = [
-{id:1,date:"2026-09-04",time:"20:00",opponent:"Jona",type:"Competitie",venue:"Walvis"},
-{id:2,date:"2026-09-18",time:"21:00",opponent:"Tweede Jeugd",type:"Competitie",venue:"Bakwetering"},
-{id:3,date:"2026-09-25",time:"21:00",opponent:"Bierussia Dortmund",type:"Competitie",venue:"Bakwetering"},
-{id:4,date:"2026-10-09",time:"20:00",opponent:"Atletic Bierbao",type:"Competitie",venue:"Bakwetering"},
-{id:5,date:"2026-10-16",time:"20:00",opponent:"Boca Seniors",type:"Competitie",venue:"Bakwetering"},
-{id:6,date:"2026-10-30",time:"21:00",opponent:"Timo",type:"Vriendschappelijk",venue:"Walvis"},
-{id:7,date:"2026-11-06",time:"20:00",opponent:"TechMudde Fc",type:"Competitie",venue:"De Drie Maenen"},
-{id:8,date:"2026-11-20",time:"19:00",opponent:"Los Amigos",type:"Competitie",venue:"Bakwetering"},
-{id:9,date:"2026-11-27",time:"21:00",opponent:"Dion Blonk",type:"Vriendschappelijk",venue:"Walvis"},
-{id:10,date:"2026-12-04",time:"20:00",opponent:"VHL veteranen",type:"Competitie",venue:"De Drie Maenen"},
-{id:11,date:"2026-12-11",time:"19:00",opponent:"Barbier voetBal",type:"Competitie",venue:"Bakwetering"},
-{id:12,date:"2027-01-08",time:"19:00",opponent:"V.W.A.B.",type:"Competitie",venue:"De Drie Maenen"},
-{id:13,date:"2027-01-15",time:"20:00",opponent:"Tweede Jeugd",type:"Competitie",venue:"De Drie Maenen"},
-{id:14,date:"2027-01-22",time:"21:00",opponent:"Wilco",type:"Vriendschappelijk",venue:"Walvis"},
-{id:15,date:"2027-01-29",time:"20:00",opponent:"Bierussia Dortmund",type:"Competitie",venue:"Bakwetering"},
-{id:16,date:"2027-02-05",time:"20:00",opponent:"Jona",type:"Competitie",venue:"Walvis"},
-{id:17,date:"2027-02-12",time:"19:00",opponent:"ACM",type:"Vriendschappelijk",venue:"Walvis"},
-{id:18,date:"2027-02-19",time:"20:00",opponent:"Atletic Bierbao",type:"Competitie",venue:"De Drie Maenen"},
-{id:19,date:"2027-03-05",time:"21:00",opponent:"Viriditas",type:"Vriendschappelijk",venue:"Walvis"},
-{id:20,date:"2027-03-12",time:"19:00",opponent:"Boca Seniors",type:"Competitie",venue:"De Drie Maenen"},
-{id:21,date:"2027-03-19",time:"22:00",opponent:"TechMudde Fc",type:"Competitie",venue:"De Drie Maenen"},
-{id:22,date:"2027-04-02",time:"19:00",opponent:"ACM",type:"Vriendschappelijk",venue:"Walvis"},
-{id:23,date:"2027-04-09",time:"21:00",opponent:"Los Amigos",type:"Competitie",venue:"Bakwetering"},
-{id:24,date:"2027-04-16",time:"21:00",opponent:"Wilco",type:"Vriendschappelijk",venue:"Walvis"},
-{id:25,date:"2027-04-23",time:"21:00",opponent:"VHL veteranen",type:"Competitie",venue:"De Drie Maenen"},
-{id:26,date:"2027-05-14",time:"20:00",opponent:"V.W.A.B.",type:"Competitie",venue:"De Drie Maenen"},
-{id:27,date:"2027-05-21",time:"20:00",opponent:"Barbier voetBal",type:"Competitie",venue:"De Drie Maenen"},
-{id:28,date:"2027-06-04",time:"21:00",opponent:"Dion Blonk",type:"Vriendschappelijk",venue:"Walvis"},
-{id:29,date:"2027-06-18",time:"21:00",opponent:"ACM",type:"Vriendschappelijk",venue:"Walvis"},
-{id:30,date:"2027-07-02",time:"21:00",opponent:"Jona?",type:"Vriendschappelijk",venue:"Walvis"},
-{id:31,date:"2027-07-16",time:"19:00",opponent:"ACM",type:"Vriendschappelijk",venue:"Walvis"}
-];
+const SUPABASE_URL = "https://lkcobfvfpldcjoqponvl.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eIpWuUuChifLO-A-Gn_w8w_QoQCBfqH";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-let players=JSON.parse(localStorage.getItem("cetus_players"))||["Speler 1","Speler 2","Speler 3","Speler 4","Speler 5"];
-let results=JSON.parse(localStorage.getItem("cetus_results"))||{};
-if(!results[1]){
-  results[1]={cetus:3,opponent:4,scorers:[]};
-  localStorage.setItem("cetus_results",JSON.stringify(results));
-}
-let settings=JSON.parse(localStorage.getItem("cetus_settings"))||{competition:true,friendly:true};
+let matches = [];
+let players = [];
+let results = {};
+let settings = JSON.parse(localStorage.getItem("cetus_settings")) || {competition:true,friendly:true};
 let currentMatchId=null,currentFilter="all",statsScope="all";
 
 function saveSettings(){localStorage.setItem("cetus_settings",JSON.stringify(settings))}
@@ -364,74 +332,56 @@ function closeModal(){document.getElementById("resultModal").classList.remove("s
 function renderScorerInputs(existing,count){
   const c=document.getElementById("scorersInputs");c.innerHTML="";
   if(count<=0){c.innerHTML='<div class="empty" style="padding:10px 0">Geen doelpunten voor Cetus.</div>';return}
-  if(!players.length){
-    c.innerHTML='<div class="empty" style="padding:10px 0">Voeg eerst spelers toe via Team. Je kunt de uitslag nu wel opslaan en de doelpuntenmakers later toevoegen.</div>';
-    return;
-  }
+  if(!players.length){c.innerHTML='<div class="empty" style="padding:10px 0">Voeg eerst spelers toe via Team. Je kunt de uitslag nu wel opslaan en de doelpuntenmakers later toevoegen.</div>';return}
   for(let i=0;i<count;i++){
     let s=document.createElement("select");s.className="scorer-input";
-    let opts='<option value="">Doelpuntenmaker '+(i+1)+'</option>';
-    players.forEach(p=>opts+=`<option value="${escapeHtml(p)}" ${existing[i]===p?"selected":""}>${escapeHtml(p)}</option>`);
+    let opts='<option value="">Doelpuntenmaker '+(i+1)+"</option>";
+    players.forEach(p=>opts+=`<option value="${escapeHtml(p.name)}" ${existing[i]===p.name?"selected":""}>${escapeHtml(p.name)}</option>`);
     s.innerHTML=opts;c.appendChild(s);
   }
 }
 document.getElementById("cetusScore").addEventListener("input",function(){
   let goals=Math.max(0,parseInt(this.value)||0),old=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value);this.value=goals;renderScorerInputs(old,goals);
 });
-function saveResult(){
+async function saveResult(){
   if(!currentMatchId)return;
   let cetus=Math.max(0,parseInt(document.getElementById("cetusScore").value)||0),opp=Math.max(0,parseInt(document.getElementById("opponentScore").value)||0);
   let scorerValues=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value);
   let scorers=scorerValues.filter(Boolean);
-  if(scorers.length>0 && scorers.length!==cetus){
-    alert(`Selecteer voor elk Cetus-doelpunt een doelpuntenmaker, of laat ze allemaal leeg om ze later toe te voegen.`);
-    return;
-  }
-  results[currentMatchId]={cetus:cetus,opponent:opp,scorers:scorers};
-  localStorage.setItem("cetus_results",JSON.stringify(results));closeModal();renderAll();
+  if(scorers.length>0 && scorers.length!==cetus){alert("Selecteer voor elk Cetus-doelpunt een doelpuntenmaker, of laat ze allemaal leeg om ze later toe te voegen.");return}
+  const saveButton=document.querySelector(".save-button");saveButton.disabled=true;saveButton.textContent="Opslaan…";
+  try{
+    const {data:resultRow,error:resultError}=await supabase.from("results").upsert({match_id:currentMatchId,cetus_goals:cetus,opponent_goals:opp},{onConflict:"match_id"}).select().single();
+    if(resultError)throw resultError;
+    const {error:deleteError}=await supabase.from("goals").delete().eq("match_id",currentMatchId);
+    if(deleteError)throw deleteError;
+    if(scorers.length){
+      const goalRows=scorers.map(name=>({match_id:currentMatchId,player_id:players.find(p=>p.name===name)?.id})).filter(x=>x.player_id);
+      if(goalRows.length!==scorers.length)throw new Error("Een doelpuntenmaker kon niet aan een speler worden gekoppeld.");
+      const {error:goalError}=await supabase.from("goals").insert(goalRows);
+      if(goalError)throw goalError;
+    }
+    await loadData();closeModal();renderAll();
+  }catch(error){console.error(error);alert("Opslaan is niet gelukt. Controleer je internetverbinding en probeer opnieuw.");}
+  finally{saveButton.disabled=false;saveButton.textContent="Opslaan";}
 }
 function renderLastMatch(){
   const c=document.getElementById("lastMatchContainer"),today=new Date();today.setHours(0,0,0,0);
   const played=matches.filter(m=>new Date(m.date+"T12:00:00")<today).sort((a,b)=>b.date.localeCompare(a.date));
   if(!played.length){c.innerHTML='Nog geen wedstrijden gespeeld.<div style="margin-top:14px"><button class="secondary-button" style="width:100%" onclick="showPage(\'matches\',document.querySelectorAll(\'.nav-button\')[1])">Uitslag invoeren</button></div>';return}
   let m=played[0],r=results[m.id];
-  if(!r){
-    c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-weight:800;font-size:18px">Cetus - ${escapeHtml(m.opponent)}</div><div style="color:var(--muted);font-size:13px;margin-top:5px">${formatLongDate(m.date)} · ${m.type}</div></div><div style="font-size:15px;font-weight:700;color:var(--red)">Uitslag ontbreekt</div></div><button class="secondary-button" style="width:100%;margin-top:14px" onclick="openResultModal(${m.id})">Uitslag invoeren</button>`;
-    return;
-  }
+  if(!r){c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-weight:800;font-size:18px">Cetus - ${escapeHtml(m.opponent)}</div><div style="color:var(--muted);font-size:13px;margin-top:5px">${formatLongDate(m.date)} · ${m.type}</div></div><div style="font-size:15px;font-weight:700;color:var(--red)">Uitslag ontbreekt</div></div><button class="secondary-button" style="width:100%;margin-top:14px" onclick="openResultModal(${m.id})">Uitslag invoeren</button>`;return}
   let out=r.cetus>r.opponent?"win":r.cetus<r.opponent?"loss":"draw",label=out==="win"?"Gewonnen":out==="loss"?"Verloren":"Gelijkspel";
   c.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-weight:800;font-size:18px">Cetus - ${escapeHtml(m.opponent)}</div><div style="color:var(--muted);font-size:13px;margin-top:5px">${formatLongDate(m.date)} · ${m.type}</div></div><div class="result ${out}" style="font-size:23px">${r.cetus} - ${r.opponent}</div></div><div style="margin-top:12px;color:var(--muted);font-size:13px">${label}</div><button class="secondary-button" style="width:100%;margin-top:14px" onclick="openResultModal(${m.id})">Uitslag aanpassen</button>`;
 }
 function renderStats(){
   let played=matches.filter(m=>results[m.id]&&(statsScope==="all"||(statsScope==="competition"&&m.type==="Competitie")||(statsScope==="friendly"&&m.type==="Vriendschappelijk")));
   let goals=0,goalsAgainst=0,wins=0,draws=0,losses=0;
-  played.forEach(m=>{
-    let r=results[m.id];
-    goals+=r.cetus;
-    goalsAgainst+=r.opponent;
-    if(r.cetus>r.opponent)wins++;
-    else if(r.cetus<r.opponent)losses++;
-    else draws++;
-  });
-  const winPercentage=played.length?Math.round(wins/played.length*100):0;
-  const lossPercentage=played.length?Math.round(losses/played.length*100):0;
-  document.getElementById("statGames").textContent=played.length;
-  document.getElementById("statGoals").textContent=goals;
-  document.getElementById("statGoalsAgainst").textContent=goalsAgainst;
-  document.getElementById("statWins").textContent=wins;
-  document.getElementById("statDraws").textContent=draws;
-  document.getElementById("statLosses").textContent=losses;
-  document.getElementById("statWinPercentage").textContent=winPercentage+"%";
-  document.getElementById("statLossPercentage").textContent=lossPercentage+"%";
-
-  const allPlayed=matches.filter(m=>results[m.id]);
-  const allWins=allPlayed.filter(m=>results[m.id].cetus>results[m.id].opponent).length;
-  const allFor=allPlayed.reduce((sum,m)=>sum+results[m.id].cetus,0);
-  const allAgainst=allPlayed.reduce((sum,m)=>sum+results[m.id].opponent,0);
-  document.getElementById("homeGames").textContent=allPlayed.length;
-  document.getElementById("homeWins").textContent=allWins;
-  document.getElementById("homeGoalDiff").textContent=`${allFor} - ${allAgainst}`;
-
+  played.forEach(m=>{let r=results[m.id];goals+=r.cetus;goalsAgainst+=r.opponent;if(r.cetus>r.opponent)wins++;else if(r.cetus<r.opponent)losses++;else draws++;});
+  const winPercentage=played.length?Math.round(wins/played.length*100):0,lossPercentage=played.length?Math.round(losses/played.length*100):0;
+  document.getElementById("statGames").textContent=played.length;document.getElementById("statGoals").textContent=goals;document.getElementById("statGoalsAgainst").textContent=goalsAgainst;document.getElementById("statWins").textContent=wins;document.getElementById("statDraws").textContent=draws;document.getElementById("statLosses").textContent=losses;document.getElementById("statWinPercentage").textContent=winPercentage+"%";document.getElementById("statLossPercentage").textContent=lossPercentage+"%";
+  const allPlayed=matches.filter(m=>results[m.id]),allWins=allPlayed.filter(m=>results[m.id].cetus>results[m.id].opponent).length,allFor=allPlayed.reduce((sum,m)=>sum+results[m.id].cetus,0),allAgainst=allPlayed.reduce((sum,m)=>sum+results[m.id].opponent,0);
+  document.getElementById("homeGames").textContent=allPlayed.length;document.getElementById("homeWins").textContent=allWins;document.getElementById("homeGoalDiff").textContent=`${allFor} - ${allAgainst}`;
   renderScorers(played);
 }
 function renderScorers(scopeMatches){
@@ -443,14 +393,71 @@ function renderScorers(scopeMatches){
 }
 function renderPlayers(){
   const c=document.getElementById("playersContainer");if(!players.length){c.innerHTML='<div class="empty">Nog geen spelers toegevoegd.</div>';return}
-  c.innerHTML="";players.forEach((p,i)=>{let r=document.createElement("div");r.className="player-row";r.innerHTML=`<div class="player-name">${escapeHtml(p)}</div><button class="delete-player" onclick="deletePlayer(${i})">Verwijderen</button>`;c.appendChild(r)});
+  c.innerHTML="";players.forEach(p=>{let r=document.createElement("div");r.className="player-row";r.innerHTML=`<div class="player-name">${escapeHtml(p.name)}</div><button class="delete-player" onclick="deletePlayer('${p.id}')">Verwijderen</button>`;c.appendChild(r)});
 }
-function addPlayer(){let i=document.getElementById("newPlayerInput"),n=i.value.trim();if(!n)return;players.push(n);localStorage.setItem("cetus_players",JSON.stringify(players));i.value="";renderPlayers()}
-function deletePlayer(i){if(!confirm("Deze speler verwijderen?"))return;players.splice(i,1);localStorage.setItem("cetus_players",JSON.stringify(players));renderPlayers()}
+async function addPlayer(){
+  let i=document.getElementById("newPlayerInput"),n=i.value.trim();if(!n)return;
+  if(players.some(p=>p.name.toLowerCase()===n.toLowerCase())){alert("Deze speler staat al in het team.");return}
+  try{const {data,error}=await supabase.from("players").insert({name:n}).select().single();if(error)throw error;players.push(data);i.value="";renderPlayers();}
+  catch(error){console.error(error);alert("Speler toevoegen is niet gelukt.");}
+}
+async function deletePlayer(id){
+  const p=players.find(x=>x.id===id);if(!p)return;
+  if(!confirm("Deze speler verwijderen?"))return;
+  try{const {error}=await supabase.from("players").delete().eq("id",id);if(error)throw error;players=players.filter(x=>x.id!==id);Object.values(results).forEach(r=>{r.scorers=(r.scorers||[]).filter(n=>n!==p.name)});renderPlayers();renderStats();}
+  catch(error){console.error(error);alert("Speler verwijderen is niet gelukt.");}
+}
 function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+
+async function loadData(){
+  const [{data:matchRows,error:matchError},{data:playerRows,error:playerError},{data:resultRows,error:resultError},{data:goalRows,error:goalError}] = await Promise.all([
+    supabase.from("matches").select("*").order("match_date",{ascending:true}).order("start_time",{ascending:true}),
+    supabase.from("players").select("*").order("name",{ascending:true}),
+    supabase.from("results").select("*"),
+    supabase.from("goals").select("match_id,player_id")
+  ]);
+  if(matchError)throw matchError;if(playerError)throw playerError;if(resultError)throw resultError;if(goalError)throw goalError;
+  matches=(matchRows||[]).map(m=>({id:m.id,date:m.match_date,time:String(m.start_time).slice(0,5),opponent:m.opponent,type:m.category==="competitie"?"Competitie":"Vriendschappelijk",venue:m.venue}));
+  players=playerRows||[];
+  results={};
+  const playerById=Object.fromEntries(players.map(p=>[p.id,p.name]));
+  (resultRows||[]).forEach(r=>{results[r.match_id]={cetus:r.cetus_goals,opponent:r.opponent_goals,scorers:[]}});
+  (goalRows||[]).forEach(g=>{if(results[g.match_id]&&playerById[g.player_id])results[g.match_id].scorers.push(playerById[g.player_id])});
+}
+
+async function migrateLocalDataIfNeeded(){
+  const marker="cetus_supabase_migrated_v1";
+  if(localStorage.getItem(marker))return;
+  try{
+    const localPlayers=JSON.parse(localStorage.getItem("cetus_players")||"[]");
+    const usefulPlayers=localPlayers.filter(n=>n&&n!=="Speler 1"&&n!=="Speler 2"&&n!=="Speler 3"&&n!=="Speler 4"&&n!=="Speler 5");
+    if(usefulPlayers.length && players.length===0){
+      const {error}=await supabase.from("players").insert([...new Set(usefulPlayers)].map(name=>({name})));if(error)throw error;
+    }
+    const localResults=JSON.parse(localStorage.getItem("cetus_results")||"{}");
+    if(localResults[1] && !results[1]){
+      const r=localResults[1];
+      const {error}=await supabase.from("results").upsert({match_id:1,cetus_goals:r.cetus||0,opponent_goals:r.opponent||0},{onConflict:"match_id"});if(error)throw error;
+    }
+    localStorage.setItem(marker,"1");
+    await loadData();
+  }catch(error){console.error("Migratie lokale gegevens mislukt",error)}
+}
+
+async function init(){
+  try{
+    await loadData();
+    await migrateLocalDataIfNeeded();
+    renderAll();
+  }catch(error){
+    console.error(error);
+    document.getElementById("nextMatchContainer").innerHTML='<div class="card empty">De gegevens konden niet worden geladen. Controleer je internetverbinding en probeer de pagina opnieuw te laden.</div>';
+  }
+}
 function renderAll(){updateCategoryButtons();renderNextMatch();renderMatches();renderStats();renderPlayers();renderLastMatch()}
-renderAll();
+
 document.getElementById("resultModal").addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal()});
+init();
 </script>
 </body>
 </html>
