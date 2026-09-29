@@ -118,8 +118,15 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 .modal-opponent{font-size:14px;color:var(--muted);margin-bottom:18px}
 .scorers-help{font-size:12px;color:var(--muted);line-height:1.45;margin:-4px 0 11px}
 .close-button{border:0;background:#f1f1f0;width:34px;height:34px;border-radius:50%;font-size:18px}
-.score-inputs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;margin-bottom:20px}
+.score-inputs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;margin-bottom:12px}
 .score-team{text-align:center;color:var(--muted);font-size:13px}.score-input{width:100%;margin-top:7px;padding:13px;border:1px solid var(--border);border-radius:11px;text-align:center;font-size:24px;font-weight:800}
+.live-score-help{font-size:12px;color:var(--muted);line-height:1.45;margin:0 0 13px;text-align:center}
+.live-score-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.live-score-control{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:7px;background:#faf9f8;border:1px solid var(--border);border-radius:13px;padding:7px}
+.live-score-control-label{text-align:center;font-size:12px;color:var(--muted);font-weight:700}
+.score-step{width:44px;height:44px;border:0;border-radius:11px;background:var(--red-light);color:var(--red-dark);font-size:25px;font-weight:800;line-height:1}
+.score-step:active{transform:scale(.95)}
+.live-status{font-size:11px;color:var(--green);text-align:center;min-height:16px;margin:-7px 0 14px}
 .score-vs{padding-bottom:13px;color:var(--muted);font-weight:700}.scorers-title{font-weight:700;margin-bottom:10px}
 .scorer-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:7px;background:#fff}
 .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}.modal-actions.with-delete{grid-template-columns:1fr 1fr 1fr}
@@ -237,13 +244,27 @@ main{padding-bottom:110px}\n</style>
       <div class="score-vs">–</div>
       <div class="score-team"><strong>Tegenstander</strong><input id="opponentScore" class="score-input" type="number" min="0" value="0"></div>
     </div>
+    <div class="live-score-help">Tijdens de wedstrijd kun je de stand direct bijwerken met + en −. Elke wijziging wordt meteen opgeslagen.</div>
+    <div class="live-score-controls">
+      <div class="live-score-control">
+        <button type="button" class="score-step" onclick="changeLiveScore('cetus',-1)" aria-label="Cetus doelpunt eraf">−</button>
+        <div class="live-score-control-label">CETUS</div>
+        <button type="button" class="score-step" onclick="changeLiveScore('cetus',1)" aria-label="Cetus doelpunt erbij">+</button>
+      </div>
+      <div class="live-score-control">
+        <button type="button" class="score-step" onclick="changeLiveScore('opponent',-1)" aria-label="Tegendoelpunt eraf">−</button>
+        <div class="live-score-control-label">TEGENSTANDER</div>
+        <button type="button" class="score-step" onclick="changeLiveScore('opponent',1)" aria-label="Tegendoelpunt erbij">+</button>
+      </div>
+    </div>
+    <div id="liveStatus" class="live-status" aria-live="polite"></div>
     <div class="scorers-title">Doelpuntenmakers van Cetus</div>
     <div class="scorers-help">Koppel ieder Cetus-doelpunt aan een speler. Je kunt dit ook later toevoegen.</div>
     <div id="scorersInputs"></div>
     <div class="modal-actions">
       <button id="deleteResultButton" class="secondary-button" style="display:none;background:#f5e8e8;color:var(--red-dark)" onclick="deleteResult()">Uitslag verwijderen</button>
       <button class="secondary-button" onclick="closeModal()">Annuleren</button>
-      <button class="save-button" onclick="saveResult()">Opslaan</button>
+      <button class="save-button" onclick="saveResult()">Uitslag opslaan</button>
     </div>
   </div>
 </div>
@@ -329,7 +350,7 @@ function renderMatches(){
 }
 function openResultModal(id){
   currentMatchId=id;let m=matches.find(x=>x.id===id),r=results[id];if(!m)return;
-  document.getElementById("modalTitle").textContent=r?"Uitslag aanpassen":"Uitslag invoeren";
+  document.getElementById("modalTitle").textContent=r?"Score bijwerken":"Live score starten";
   document.getElementById("modalOpponent").textContent=`${m.opponent} · ${formatLongDate(m.date)} · ${m.time}`;
   const deleteButton=document.getElementById("deleteResultButton");
   const actions=document.querySelector(".modal-actions");
@@ -338,6 +359,7 @@ function openResultModal(id){
   document.getElementById("cetusScore").value=r?r.cetus:0;
   document.getElementById("opponentScore").value=r?r.opponent:0;
   renderScorerInputs(r?r.scorers||[]:[],r?r.cetus:0);
+  document.getElementById("liveStatus").textContent=r?"Stand opgeslagen in de app.":"Nog geen score opgeslagen.";
   document.getElementById("resultModal").classList.add("show");
 }
 function closeModal(){document.getElementById("resultModal").classList.remove("show");currentMatchId=null}
@@ -355,6 +377,30 @@ function renderScorerInputs(existing,count){
 document.getElementById("cetusScore").addEventListener("input",function(){
   let goals=Math.max(0,parseInt(this.value)||0),old=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value);this.value=goals;renderScorerInputs(old,goals);
 });
+async function changeLiveScore(team,delta){
+  if(!currentMatchId)return;
+  const cetusInput=document.getElementById("cetusScore"),oppInput=document.getElementById("opponentScore");
+  const currentCetus=Math.max(0,parseInt(cetusInput.value)||0),currentOpp=Math.max(0,parseInt(oppInput.value)||0);
+  const cetus=team==="cetus"?Math.max(0,currentCetus+delta):currentCetus;
+  const opp=team==="opponent"?Math.max(0,currentOpp+delta):currentOpp;
+  cetusInput.value=cetus;oppInput.value=opp;
+  const buttons=document.querySelectorAll(".score-step");buttons.forEach(b=>b.disabled=true);
+  document.getElementById("liveStatus").textContent="Opslaan…";
+  try{
+    const {error}=await supabaseClient.from("results").upsert({match_id:currentMatchId,cetus_goals:cetus,opponent_goals:opp},{onConflict:"match_id"});
+    if(error)throw error;
+    const existing=results[currentMatchId]?.scorers||[];
+    results[currentMatchId]={cetus,opponent:opp,scorers:existing.slice(0,cetus)};
+    renderScorerInputs(results[currentMatchId].scorers,cetus);
+    renderAll();
+    document.getElementById("liveStatus").textContent=`Stand opgeslagen: ${cetus} - ${opp}`;
+  }catch(error){
+    console.error(error);
+    document.getElementById("liveStatus").textContent="Opslaan mislukt. Probeer opnieuw.";
+    alert("De live score kon niet worden opgeslagen. Controleer je internetverbinding.");
+  }finally{buttons.forEach(b=>b.disabled=false);}
+}
+
 async function deleteResult(){
   if(!currentMatchId || !results[currentMatchId])return;
   if(!confirm("Deze uitslag en de doelpuntenmakers verwijderen?"))return;
@@ -374,7 +420,7 @@ async function saveResult(){
   let cetus=Math.max(0,parseInt(document.getElementById("cetusScore").value)||0),opp=Math.max(0,parseInt(document.getElementById("opponentScore").value)||0);
   let scorerValues=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value);
   let scorers=scorerValues.filter(Boolean);
-  if(scorers.length>0 && scorers.length!==cetus){alert("Selecteer voor elk Cetus-doelpunt een doelpuntenmaker, of laat ze allemaal leeg om ze later toe te voegen.");return}
+  if(scorers.length>cetus){alert("Er zijn meer doelpuntenmakers geselecteerd dan Cetus-doelpunten.");return}
   const saveButton=document.querySelector(".save-button");saveButton.disabled=true;saveButton.textContent="Opslaan…";
   try{
     const {data:resultRow,error:resultError}=await supabaseClient.from("results").upsert({match_id:currentMatchId,cetus_goals:cetus,opponent_goals:opp},{onConflict:"match_id"}).select().single();
@@ -389,7 +435,7 @@ async function saveResult(){
     }
     await loadData();closeModal();renderAll();
   }catch(error){console.error(error);alert("Opslaan is niet gelukt. Controleer je internetverbinding en probeer opnieuw.");}
-  finally{saveButton.disabled=false;saveButton.textContent="Opslaan";}
+  finally{saveButton.disabled=false;saveButton.textContent="Uitslag opslaan";}
 }
 function renderLastMatch(){
   const c=document.getElementById("lastMatchContainer"),today=new Date();today.setHours(0,0,0,0);
