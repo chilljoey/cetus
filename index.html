@@ -118,13 +118,14 @@ td:not(:first-child),th:not(:first-child){text-align:center}.position{font-weigh
 .modal-opponent{font-size:14px;color:var(--muted);margin-bottom:18px}
 .scorers-help{font-size:12px;color:var(--muted);line-height:1.45;margin:-4px 0 11px}
 .close-button{border:0;background:#f1f1f0;width:34px;height:34px;border-radius:50%;font-size:18px}
-.score-inputs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;margin-bottom:12px}
-.score-team{text-align:center;color:var(--muted);font-size:13px}.score-input{width:100%;margin-top:7px;padding:13px;border:1px solid var(--border);border-radius:11px;text-align:center;font-size:24px;font-weight:800}
-.live-score-help{font-size:12px;color:var(--muted);line-height:1.45;margin:0 0 13px;text-align:center}
-.live-score-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.live-score-control{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:7px;background:#faf9f8;border:1px solid var(--border);border-radius:13px;padding:7px}
-.live-score-control-label{text-align:center;font-size:12px;color:var(--muted);font-weight:700}
-.score-step{width:44px;height:44px;border:0;border-radius:11px;background:var(--red-light);color:var(--red-dark);font-size:25px;font-weight:800;line-height:1}
+.live-score-board{display:grid;grid-template-columns:1fr 38px 1fr;gap:8px;align-items:center;margin:4px 0 14px}
+.score-team{text-align:center;background:#faf9f8;border:1px solid var(--border);border-radius:15px;padding:12px 9px 10px}
+.score-team-label{color:var(--muted);font-size:12px;font-weight:800;letter-spacing:.4px}
+.score-display{font-size:42px;line-height:1;font-weight:900;margin:7px 0 11px;color:var(--text)}
+.score-vs{color:var(--muted);font-weight:800;text-align:center;font-size:18px}
+.live-score-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.live-score-control{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.score-step{width:100%;height:44px;border:0;border-radius:11px;background:var(--red-light);color:var(--red-dark);font-size:25px;font-weight:800;line-height:1}
 .score-step:active{transform:scale(.95)}
 .live-status{font-size:11px;color:var(--green);text-align:center;min-height:16px;margin:-7px 0 14px}
 .score-vs{padding-bottom:13px;color:var(--muted);font-weight:700}.scorers-title{font-weight:700;margin-bottom:10px}
@@ -239,24 +240,26 @@ main{padding-bottom:110px}\n</style>
       <button class="close-button" onclick="closeModal()">×</button>
     </div>
     <div class="modal-opponent" id="modalOpponent">Tegenstander</div>
-    <div class="score-inputs">
-      <div class="score-team"><strong>CETUS</strong><input id="cetusScore" class="score-input" type="number" min="0" value="0"></div>
+    <div class="live-score-board" aria-label="Actuele score">
+      <div class="score-team">
+        <div class="score-team-label">CETUS</div>
+        <div id="cetusScoreDisplay" class="score-display">0</div>
+        <div class="live-score-controls">
+          <button type="button" class="score-step" onclick="changeLiveScore('cetus',-1)" aria-label="Cetus doelpunt eraf">−</button>
+          <button type="button" class="score-step" onclick="changeLiveScore('cetus',1)" aria-label="Cetus doelpunt erbij">+</button>
+        </div>
+      </div>
       <div class="score-vs">–</div>
-      <div class="score-team"><strong>Tegenstander</strong><input id="opponentScore" class="score-input" type="number" min="0" value="0"></div>
-    </div>
-    <div class="live-score-help">Tijdens de wedstrijd kun je de stand direct bijwerken met + en −. Elke wijziging wordt meteen opgeslagen.</div>
-    <div class="live-score-controls">
-      <div class="live-score-control">
-        <button type="button" class="score-step" onclick="changeLiveScore('cetus',-1)" aria-label="Cetus doelpunt eraf">−</button>
-        <div class="live-score-control-label">CETUS</div>
-        <button type="button" class="score-step" onclick="changeLiveScore('cetus',1)" aria-label="Cetus doelpunt erbij">+</button>
-      </div>
-      <div class="live-score-control">
-        <button type="button" class="score-step" onclick="changeLiveScore('opponent',-1)" aria-label="Tegendoelpunt eraf">−</button>
-        <div class="live-score-control-label">TEGENSTANDER</div>
-        <button type="button" class="score-step" onclick="changeLiveScore('opponent',1)" aria-label="Tegendoelpunt erbij">+</button>
+      <div class="score-team">
+        <div class="score-team-label">TEGENSTANDER</div>
+        <div id="opponentScoreDisplay" class="score-display">0</div>
+        <div class="live-score-controls">
+          <button type="button" class="score-step" onclick="changeLiveScore('opponent',-1)" aria-label="Tegendoelpunt eraf">−</button>
+          <button type="button" class="score-step" onclick="changeLiveScore('opponent',1)" aria-label="Tegendoelpunt erbij">+</button>
+        </div>
       </div>
     </div>
+    <div class="live-score-help">Tik tijdens de wedstrijd op + of −. Elke wijziging wordt direct opgeslagen.</div>
     <div id="liveStatus" class="live-status" aria-live="polite"></div>
     <div class="scorers-title">Doelpuntenmakers van Cetus</div>
     <div class="scorers-help">Koppel ieder Cetus-doelpunt aan een speler. Je kunt dit ook later toevoegen.</div>
@@ -264,7 +267,7 @@ main{padding-bottom:110px}\n</style>
     <div class="modal-actions">
       <button id="deleteResultButton" class="secondary-button" style="display:none;background:#f5e8e8;color:var(--red-dark)" onclick="deleteResult()">Uitslag verwijderen</button>
       <button class="secondary-button" onclick="closeModal()">Annuleren</button>
-      <button class="save-button" onclick="saveResult()">Uitslag opslaan</button>
+      <button class="save-button" onclick="saveResult()">Doelpuntenmakers opslaan</button>
     </div>
   </div>
 </div>
@@ -356,8 +359,8 @@ function openResultModal(id){
   const actions=document.querySelector(".modal-actions");
   deleteButton.style.display=r?"block":"none";
   actions.classList.toggle("with-delete",!!r);
-  document.getElementById("cetusScore").value=r?r.cetus:0;
-  document.getElementById("opponentScore").value=r?r.opponent:0;
+  document.getElementById("cetusScoreDisplay").textContent=r?r.cetus:0;
+  document.getElementById("opponentScoreDisplay").textContent=r?r.opponent:0;
   renderScorerInputs(r?r.scorers||[]:[],r?r.cetus:0);
   document.getElementById("liveStatus").textContent=r?"Stand opgeslagen in de app.":"Nog geen score opgeslagen.";
   document.getElementById("resultModal").classList.add("show");
@@ -374,16 +377,13 @@ function renderScorerInputs(existing,count){
     s.innerHTML=opts;c.appendChild(s);
   }
 }
-document.getElementById("cetusScore").addEventListener("input",function(){
-  let goals=Math.max(0,parseInt(this.value)||0),old=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value);this.value=goals;renderScorerInputs(old,goals);
-});
 async function changeLiveScore(team,delta){
   if(!currentMatchId)return;
-  const cetusInput=document.getElementById("cetusScore"),oppInput=document.getElementById("opponentScore");
-  const currentCetus=Math.max(0,parseInt(cetusInput.value)||0),currentOpp=Math.max(0,parseInt(oppInput.value)||0);
+  const cetusDisplay=document.getElementById("cetusScoreDisplay"),oppDisplay=document.getElementById("opponentScoreDisplay");
+  const currentCetus=Math.max(0,parseInt(cetusDisplay.textContent)||0),currentOpp=Math.max(0,parseInt(oppDisplay.textContent)||0);
   const cetus=team==="cetus"?Math.max(0,currentCetus+delta):currentCetus;
   const opp=team==="opponent"?Math.max(0,currentOpp+delta):currentOpp;
-  cetusInput.value=cetus;oppInput.value=opp;
+  cetusDisplay.textContent=cetus;oppDisplay.textContent=opp;
   const buttons=document.querySelectorAll(".score-step");buttons.forEach(b=>b.disabled=true);
   document.getElementById("liveStatus").textContent="Opslaan…";
   try{
@@ -417,7 +417,7 @@ async function deleteResult(){
 }
 async function saveResult(){
   if(!currentMatchId)return;
-  let cetus=Math.max(0,parseInt(document.getElementById("cetusScore").value)||0),opp=Math.max(0,parseInt(document.getElementById("opponentScore").value)||0);
+  let cetus=Math.max(0,parseInt(document.getElementById("cetusScoreDisplay").textContent)||0),opp=Math.max(0,parseInt(document.getElementById("opponentScoreDisplay").textContent)||0);
   let scorerValues=Array.from(document.querySelectorAll(".scorer-input")).map(s=>s.value);
   let scorers=scorerValues.filter(Boolean);
   if(scorers.length>cetus){alert("Er zijn meer doelpuntenmakers geselecteerd dan Cetus-doelpunten.");return}
